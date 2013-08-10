@@ -1,6 +1,6 @@
 # OculusGlfwSkeleton
 
-##Description
+## Description
 
 This app skeleton assuages some of the difficulties inherent in developing graphical apps for HMDs. Running a typical Rift app with cloned displays outputs barrel-distorted stereo pairs to the primary monitor, introduces latency, confounds debugging, and makes the Rift display that annoying blue square resolution message for five seconds on every mode change.
 
