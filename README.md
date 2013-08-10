@@ -35,6 +35,6 @@ Set your display to "Extend" using WinKey + P. Position your Rift DK monitor imm
 
 ### Thanks
 
-elmindreda for the awesome Glfw3 framework which makes multi-window GL apps possible https://github.com/glfw/glfw
-Palmer Luckey for the Oculus Rift
-Philip Rideout for the excellent CMake/OpenGL code
+- elmindreda for the awesome Glfw3 framework which makes multi-window GL apps possible https://github.com/glfw/glfw
+- Palmer Luckey for the Oculus Rift
+- Philip Rideout for the excellent CMake/OpenGL code
