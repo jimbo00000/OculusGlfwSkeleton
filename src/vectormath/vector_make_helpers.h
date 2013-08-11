@@ -7,4 +7,4 @@
 
 int2 make_int2(int a, int b);
 
-#endif _VECTOR_MAKE_HELPERS_
+#endif //_VECTOR_MAKE_HELPERS_

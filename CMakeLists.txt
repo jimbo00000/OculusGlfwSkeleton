@@ -48,9 +48,10 @@ ELSEIF( UNIX )
     #
     # Custom Windows include and link dirs for my machine:
     #
-    SET( LIBS_HOME "~/lib/" )
+    ADD_DEFINITIONS( -D_LINUX )
+    SET( LIBS_HOME "~/lib" )
 
-    SET( OCULUSSDK_ROOT "${LIBS_HOME}/OculusSDK-0.2.2" )
+    SET( OCULUSSDK_ROOT "${LIBS_HOME}/OculusSDK" )
     INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Include" )
     INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Src" )
     LINK_DIRECTORIES   ( "${OCULUSSDK_ROOT}/LibOVR/Lib/Linux/Release/x86_64/" )
@@ -63,19 +64,21 @@ ELSEIF( UNIX )
         ADD_DEFINITIONS( -DUSE_ANTTWEAKBAR )
     ENDIF( USE_ANTTWEAKBAR )
 
-    ADD_DEFINITIONS( -D_LINUX )
-
     SET( PLATFORM_LIBS
+        -lovr
         -lGLEW
         -lGLU -lglfw3
         -pthread
         -ludev
         -lrt
-        libovr.a
+        -lXinerama
+        -lXrandr
+        -lXxf86vm
+        -lXi
         ${ANT_LIBS}
         )
-
 ENDIF()
+
 
 #
 # Platform-independent section
@@ -114,11 +117,12 @@ ADD_LIBRARY( AppSkeleton ${APPSKELETON_SOURCE_FILES} )
 
 ADD_EXECUTABLE( ${PROJECT_NAME}
     src/skeleton/simple_glfw_skeleton.cpp
-)
+    )
 
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
     AppSkeleton
     OVRkill
     Util
     VectorMath
-    ${PLATFORM_LIBS} )
+    ${PLATFORM_LIBS}
+    )

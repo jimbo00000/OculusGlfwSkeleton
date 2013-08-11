@@ -159,8 +159,8 @@ void PrintMonitorInfo()
         int widthMM, heightMM;
         glfwGetMonitorPhysicalSize(pMonitor, &widthMM, &heightMM);
         //const double dpi = mode->width / (widthMM / 25.4);
-        printf("    physical size: %d x %d mm\n");
-        LOG_INFO("    physical size: %d x %d mm");
+        printf("    physical size: %d x %d mm\n", widthMM, heightMM);
+        LOG_INFO("    physical size: %d x %d mm", widthMM, heightMM);
 
         /// Modes
         const GLFWvidmode* mode = glfwGetVideoMode(pMonitor);
