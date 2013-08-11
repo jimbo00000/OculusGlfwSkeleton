@@ -20,7 +20,7 @@
 #include "Logger.h"
 #include "FBO.h"
 
-#include "AppSkeleton/AntOculusAppSkeleton.h"
+#include "AntOculusAppSkeleton.h"
 
 AntOculusAppSkeleton g_app;
 
@@ -277,11 +277,6 @@ bool initGlfw(int argc, char **argv, bool fullScreen)
 int main(int argc, char *argv[])
 {
     bool fullScreen = false;
-
-    if (!IsDebuggerPresent()) ///< Ctrl-F5 to run in Rift mode,  just F5 for windowed
-    {
-        fullScreen = true;
-    }
 
     g_app.initVR(fullScreen);
 

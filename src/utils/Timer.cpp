@@ -9,7 +9,7 @@
 ///@todo There is probably a better way to do this.
 
 // http://www.guyrutenberg.com/2007/09/22/profiling-code-using-clock_gettime/
-timespec diff(timespec start, timespec end)
+timespec diff(const timespec& start, const timespec& end)
 {
 	timespec temp;
 	if ((end.tv_nsec-start.tv_nsec)<0) {

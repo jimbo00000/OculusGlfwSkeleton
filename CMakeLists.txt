@@ -44,8 +44,38 @@ IF( WIN32 )
         ${ANT_LIBS}
         )
 
-ENDIF()
+ELSEIF( UNIX )
+    #
+    # Custom Windows include and link dirs for my machine:
+    #
+    SET( LIBS_HOME "~/lib/" )
 
+    SET( OCULUSSDK_ROOT "${LIBS_HOME}/OculusSDK-0.2.2" )
+    INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Include" )
+    INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Src" )
+    LINK_DIRECTORIES   ( "${OCULUSSDK_ROOT}/LibOVR/Lib/Linux/Release/x86_64/" )
+
+    IF( USE_ANTTWEAKBAR )
+        SET( ANTTWEAKBAR_ROOT "${LIBS_HOME}/AntTweakBar" )
+        INCLUDE_DIRECTORIES( "${ANTTWEAKBAR_ROOT}/include" )
+        LINK_DIRECTORIES   ( "${ANTTWEAKBAR_ROOT}/lib" )
+        SET( ANT_LIBS libAntTweakBar.a )
+        ADD_DEFINITIONS( -DUSE_ANTTWEAKBAR )
+    ENDIF( USE_ANTTWEAKBAR )
+
+    ADD_DEFINITIONS( -D_LINUX )
+
+    SET( PLATFORM_LIBS
+        -lGLEW
+        -lGLU -lglfw3
+        -pthread
+        -ludev
+        -lrt
+        libovr.a
+        ${ANT_LIBS}
+        )
+
+ENDIF()
 
 #
 # Platform-independent section
@@ -75,7 +105,7 @@ INCLUDE_DIRECTORIES("src/utils")
 INCLUDE_DIRECTORIES("src/utils/GL")
 INCLUDE_DIRECTORIES("src/vectormath")
 INCLUDE_DIRECTORIES("src/OVRkill")
-INCLUDE_DIRECTORIES("src/AppSkeleton")
+INCLUDE_DIRECTORIES("src/appskeleton")
 
 ADD_LIBRARY( Util        ${UTIL_SOURCE_FILES} )
 ADD_LIBRARY( VectorMath  ${VECTORMATH_SOURCE_FILES} )
@@ -87,8 +117,8 @@ ADD_EXECUTABLE( ${PROJECT_NAME}
 )
 
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
+    AppSkeleton
+    OVRkill
     Util
     VectorMath
-    OVRkill
-    AppSkeleton
     ${PLATFORM_LIBS} )

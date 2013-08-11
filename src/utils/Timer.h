@@ -49,7 +49,7 @@ class Timer {
 #include <time.h>
 
 // http://www.guyrutenberg.com/2007/09/22/profiling-code-using-clock_gettime/
-timespec diff(timespec start, timespec end);
+timespec diff(const timespec& start, const timespec& end);
 
 class Timer {
   public:
@@ -62,7 +62,7 @@ class Timer {
     }
     /// seconds() returns the number of seconds (to very high resolution)
     /// elapsed since the timer was last created or reset().
-    double seconds() {
+    double seconds() const {
       timespec time2;
       clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &time2);
       timespec ts = diff(time1_, time2);
@@ -71,7 +71,7 @@ class Timer {
     }
     /// seconds() returns the number of milliseconds (to very high resolution)
     /// elapsed since the timer was last created or reset().
-    double milliseconds() {
+    double milliseconds() const {
       return seconds() * 1000.0;
     }
   private:
