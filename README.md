@@ -13,6 +13,9 @@ This multi-window skeleton allows a programmer to run and debug using their norm
 
 Set your display to "Extend" using WinKey + P. Position your Rift DK monitor immediately to the right of your primary display, with the top edges of the desktops aligned. The skeleton creates a non-fullscreen window to fill the desktop area of the extended display(using a fullscreen window on an extended display, Windows will automatically minimize that window on the first input event outside of that window).
 
+### Linux
+
+Use **nvidia-settings** or equivalent to set your Rift DK monitor to the right of your primary display, top-aligned(e.g. 1280x800 +1920+0).
 
 ## Build
 
@@ -38,3 +41,5 @@ Set your display to "Extend" using WinKey + P. Position your Rift DK monitor imm
 - elmindreda for the awesome Glfw3 framework which makes multi-window GL apps possible https://github.com/glfw/glfw
 - Palmer Luckey for the Oculus Rift
 - Philip Rideout for the excellent CMake/OpenGL code
+- Philippe Decaudin for AntTweakBar
+- Milan Ikits and Marcelo Magallon for GLEW
