@@ -155,7 +155,7 @@ void OculusAppSkeleton::HandleGlfwJoystick()
                 padRx = 0.0f;
             if (fabs(padRy) < threshold)
                 padRy = 0.0f;
-            
+
             GamepadRotate = OVR::Vector3f(2 * padLx, -2 * padLy,  0);
             GamepadMove  += OVR::Vector3f(2 * padRy, 0         , 2 * padRx);
         }
@@ -180,10 +180,29 @@ void OculusAppSkeleton::HandleGlfwJoystick()
             }
             float padLx = joy1buts[0] + joy1buts[2];
             float padLy = joy1buts[1] + joy1buts[3];
-            
+
             GamepadMove += OVR::Vector3f(padLx * padLx * (padLx > 0 ? 1 : -1),
                                          0,
                                          padLy * padLy * (padLy > 0 ? -1 : 1));
+
+            /// Two right shoulder buttons are [5] and [7] on gravis Gamepad pro
+            if (retButs > 7)
+            {
+                /// Top shoulder button rises, bottom lowers
+                float joy1shoulderbuts[4] = {
+                    joy1but[4] == GLFW_PRESS ? 1.0f : 0.0f,
+                    joy1but[5] == GLFW_PRESS ? 1.0f : 0.0f,
+                    joy1but[6] == GLFW_PRESS ? -1.0f : 0.0f,
+                    joy1but[7] == GLFW_PRESS ? -1.0f : 0.0f,
+                };
+                float padLup   = joy1shoulderbuts[0] + joy1shoulderbuts[1];
+                float padLdown = joy1shoulderbuts[2] + joy1shoulderbuts[3];
+                padLup += padLdown;
+
+                GamepadMove += OVR::Vector3f(0,
+                                             padLup * padLup * (padLup > 0 ? 1 : -1),
+                                             0);
+            }
         }
     }
 }
