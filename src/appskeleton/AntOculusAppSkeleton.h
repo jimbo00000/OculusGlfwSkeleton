@@ -44,15 +44,14 @@ public:
     virtual void frameStart() { m_timer.OnFrame(); m_fps = m_timer.GetFPS(); }
 
 protected:
+    FPSTimer  m_timer;
+    float     m_fps;
 
 #ifdef USE_ANTTWEAKBAR
     void _InitializeBar();
     TwBar* m_bar;
     double speed;
 #endif
-
-    FPSTimer  m_timer;
-    float     m_fps;
 
 private: // Disallow copy ctor and assignment operator
     AntOculusAppSkeleton(const AntOculusAppSkeleton&);

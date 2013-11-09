@@ -3,7 +3,7 @@ PROJECT( OculusGLFWSkeleton )
 
 INCLUDE(cmake_modules/HardcodeShaders.cmake)
 
-SET( USE_ANTTWEAKBAR TRUE )
+SET( USE_ANTTWEAKBAR TRUE CACHE BOOL "Use AntTweakBar" )
 
 #
 # Platform-dependent section
@@ -12,7 +12,7 @@ IF( WIN32 )
     #
     # Custom Windows include and link dirs for my machine:
     #
-    SET( LIBS_HOME "C:/lib" )
+    SET( LIBS_HOME "C:/lib" CACHE STRING "Location of support libraries Glut, Glew and others"  )
 
     SET( GLFW3_ROOT "${LIBS_HOME}/glfw-3.0.1.bin.WIN32" )
     INCLUDE_DIRECTORIES( "${GLFW3_ROOT}/include" )

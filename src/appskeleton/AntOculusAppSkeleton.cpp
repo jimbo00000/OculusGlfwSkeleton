@@ -3,11 +3,11 @@
 #include "AntOculusAppSkeleton.h"
 
 AntOculusAppSkeleton::AntOculusAppSkeleton()
-#ifdef USE_ANTTWEAKBAR
-: m_bar(NULL)
-#endif
-, m_timer()
+: m_timer()
 , m_fps(0.0f)
+#ifdef USE_ANTTWEAKBAR
+, m_bar(NULL)
+#endif
 {
 }
 
@@ -119,6 +119,8 @@ void AntOculusAppSkeleton::charkey(unsigned int key)
 
 void AntOculusAppSkeleton::resize(int w, int h)
 {
+#ifdef USE_ANTTWEAKBAR
     TwWindowSize(m_windowWidth, m_windowHeight);
+#endif
     OculusAppSkeleton::resize(w,h);
 }
