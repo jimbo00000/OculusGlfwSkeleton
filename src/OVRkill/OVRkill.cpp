@@ -142,6 +142,9 @@ void OVRkill::PresentFbo_NoDistortion() const
                        6,
                        GL_UNSIGNED_INT,
                        &tris[0]);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
     }
     glUseProgram(0);
 }
@@ -253,6 +256,9 @@ void OVRkill::PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEy
                        6,
                        GL_UNSIGNED_INT,
                        &tris[0]);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
     }
     glUseProgram(0);
 }
@@ -293,18 +299,18 @@ void OVRkill::InitOVR()
         hmd.HResolution = 1280;
         hmd.VResolution = 800;
 
-        hmd.HScreenSize = 0.09f;
-        hmd.VScreenSize = 0.06f;
-        hmd.VScreenCenter = 0.02f;
+        hmd.HScreenSize = 0.14975999f;
+        hmd.VScreenSize = 0.093599997f;
+        hmd.VScreenCenter = 0.046799999f;
 
         hmd.DistortionK[0] = 1.0f;
         hmd.DistortionK[1] = 0.5f;
         hmd.DistortionK[2] = 0.25f;
         hmd.DistortionK[3] = 0.0f;
 
-        hmd.EyeToScreenDistance = 0.01f;
+        hmd.EyeToScreenDistance = 0.041000001f;
         hmd.InterpupillaryDistance = 0.064f;
-        hmd.LensSeparationDistance = 0.07f;
+        hmd.LensSeparationDistance = 0.063500002f;
     }
     else
     {
