@@ -172,16 +172,13 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         //"uniform vec2 Scale;\n"
         //"uniform vec2 ScaleIn;\n"
         //"uniform vec4 HmdWarpParam;\n"
-        
-        /// this value ripped from the TinyRoom demo at runtime
-        const float lensOff = distParams.lensOff; //0.287994f - 0.25f;
 
         /// The left screen is centered at (0.25, 0.5)
         glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
-            distParams.LensCenterX + lensOff, distParams.LensCenterY);
+            distParams.LensCenterX + distParams.lensOff, distParams.LensCenterY);
 
         glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
-            0.25f, 0.5f);
+            distParams.ScreenCenterX, distParams.ScreenCenterY);
 
         /// The right screen is centered at (0.75, 0.5)
         if (eyeParams.Eye == OVR::Util::Render::StereoEye_Right)
@@ -190,7 +187,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
                 0.75f, 0.5f);
             
             glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
-                0.75f - lensOff, 0.5f);
+                0.75f - distParams.lensOff, 0.5f);
         }
         
         glUniform2f(getUniLoc(m_progRiftDistortion, "Scale"),

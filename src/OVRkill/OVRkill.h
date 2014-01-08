@@ -10,10 +10,14 @@ struct RiftDistortionParams
     float lensOff;
     float LensCenterX;
     float LensCenterY;
+    float ScreenCenterX;
+    float ScreenCenterY;
     RiftDistortionParams()
-        : lensOff(0.287994f - 0.25f)
+        : lensOff(0.287994f - 0.25f) // this value ripped from the TinyRoom demo at runtime
         , LensCenterX(0.25f)
         , LensCenterY(0.50f)
+        , ScreenCenterX(0.25f)
+        , ScreenCenterY(0.5f)
     {}
 };
 
