@@ -84,7 +84,7 @@ const GLchar* GetShaderSourceFromFile(const char* filename)
     }
 
     file.seekg(0, std::ios::end);
-    GLint length = file.tellg();
+    GLint length = (GLint)file.tellg();
     file.seekg(std::ios::beg);
 
     GLchar* shaderText = new char[length+1];
