@@ -18,6 +18,18 @@ AntOculusAppSkeleton::~AntOculusAppSkeleton()
 }
 
 #ifdef USE_ANTTWEAKBAR
+
+static void TW_CALL ResetDistortion(void *clientData)
+{
+    if (clientData)
+    {
+        RiftDistortionParams* pP = static_cast<RiftDistortionParams *>(clientData);
+        RiftDistortionParams reset;
+        memcpy(pP, &reset, sizeof(RiftDistortionParams));
+    }
+}
+
+
 void AntOculusAppSkeleton::_InitializeBar()
 {
     ///@note Bad size errors will be thrown if this is not called at init
@@ -25,7 +37,7 @@ void AntOculusAppSkeleton::_InitializeBar()
 
     // Create a tweak bar
     m_bar = TwNewBar("TweakBar");
-    TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLFW and OpenGL.' "); // Message added to the help bar.
+    TwDefine(" TweakBar refresh=0.1 ");
 
     TwAddVarRO(m_bar, "fps", TW_TYPE_FLOAT, &m_fps, 
                " label='fps' help='Frames per second' precision=0 ");
@@ -46,9 +58,10 @@ void AntOculusAppSkeleton::_InitializeBar()
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
 
 
-    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
+    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist,
                " label='lensOff' min=0 max=0.1 step=0.001 help='lensOff' group=HMD ");
-    
+    TwAddButton(m_bar, "ResetDistortion", ResetDistortion, &m_riftDist,
+        " label='ResetDistortion' group='HMD' ");
 
 }
 #endif
