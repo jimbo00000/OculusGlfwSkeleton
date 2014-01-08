@@ -92,11 +92,15 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddButton(m_bar, "ResetDistortion", ResetDistortion, &m_riftDist,
         " label='ResetDistortion' group='HMD' ");
 
+    TwAddSeparator(m_bar, NULL, " group='HMD' ");
+
     TwAddVarCB(m_bar, "FBO width", TW_TYPE_INT32, NULL, GetDistortionFboWidth, &m_ok,
         "precision=0 group='HMD' ");
     TwAddVarCB(m_bar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
         "precision=0 group='HMD' ");
 
+    TwAddVarRW(m_bar, "FBO ScaleUp", TW_TYPE_FLOAT, &m_bufferScaleUp,
+               " label='FBO ScaleUp' min=0.25 max=4.0 step=0.01 group=HMD ");
 
 }
 #endif

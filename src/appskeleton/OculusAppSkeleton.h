@@ -103,6 +103,8 @@ protected:
 
     OVRkill m_ok;
     RiftDistortionParams  m_riftDist;
+    float m_bufferScaleUp;
+
     Scene   m_scene;
 
     GLuint m_avatarProg;

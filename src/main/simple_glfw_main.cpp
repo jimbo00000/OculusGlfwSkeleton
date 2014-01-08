@@ -278,6 +278,7 @@ int main(int argc, char *argv[])
 {
     bool fullScreen = false;
 
+    // Call initVR before initGL to get recommended size for our FBO distortion buffer
     g_app.initVR(fullScreen);
 
     initGlfw(argc, argv, fullScreen);

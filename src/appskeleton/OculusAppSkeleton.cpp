@@ -40,6 +40,7 @@ OculusAppSkeleton::OculusAppSkeleton()
 , modifier_mode(0)
 , m_ok()
 , m_riftDist()
+, m_bufferScaleUp(1.0f)
 , m_scene()
 , m_avatarProg(0)
 , m_displaySceneInControl(true)
@@ -73,6 +74,7 @@ bool OculusAppSkeleton::initVR(bool fullScreen)
 {
     m_ok.InitOVR();
     m_ok.SetDisplayMode(OVRkill::StereoWithDistortion);
+    m_bufferScaleUp = m_ok.GetRenderBufferScaleIncrease();
 
     return true;
 }

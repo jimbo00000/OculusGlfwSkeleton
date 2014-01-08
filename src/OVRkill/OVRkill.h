@@ -49,11 +49,12 @@ public:
     OVR::Quatf GetOrientation() const { return m_SFusion.GetOrientation(); }
     bool       GetStereoMode() const { return m_SConfig.GetStereoMode() == OVR::Util::Render::Stereo_LeftRight_Multipass; }
     const OVR::HMDInfo& GetHMD() const { return m_HMDInfo; }
-    
+
     int GetOculusWidth() const { return m_windowWidth; }
     int GetOculusHeight() const { return m_windowHeight; }
     int GetRenderBufferWidth() const { return m_fboWidth; }
     int GetRenderBufferHeight() const { return m_fboHeight; }
+    float GetRenderBufferScaleIncrease() { return m_SConfig.GetDistortionScale(); }
 
     void InitOVR();
     void DestroyOVR();
