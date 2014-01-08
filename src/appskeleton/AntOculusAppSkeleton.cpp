@@ -64,11 +64,14 @@ void AntOculusAppSkeleton::_InitializeBar()
                " label='LensCenterX' min=0 max=1.0 step=0.01 group=HMD ");
     TwAddVarRW(m_bar, "LensCenterY", TW_TYPE_FLOAT, &m_riftDist.LensCenterY,
                " label='LensCenterY' min=0 max=1.0 step=0.01 group=HMD ");
-    
     TwAddVarRW(m_bar, "ScreenCenterX", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterX,
                " label='ScreenCenterX' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScreenCenterY8", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterY,
+    TwAddVarRW(m_bar, "ScreenCenterY", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterY,
                " label='ScreenCenterY' min=0 max=1.0 step=0.01 group=HMD ");
+    TwAddVarRW(m_bar, "ScaleX", TW_TYPE_FLOAT, &m_riftDist.ScaleX,
+               " label='ScaleX' min=0 max=1.0 step=0.01 group=HMD ");
+    TwAddVarRW(m_bar, "ScaleY", TW_TYPE_FLOAT, &m_riftDist.ScaleY,
+               " label='ScaleY' min=0 max=1.0 step=0.01 group=HMD ");
 
     TwAddButton(m_bar, "ResetDistortion", ResetDistortion, &m_riftDist,
         " label='ResetDistortion' group='HMD' ");

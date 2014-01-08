@@ -173,14 +173,14 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         //"uniform vec2 ScaleIn;\n"
         //"uniform vec4 HmdWarpParam;\n"
 
-        /// The left screen is centered at (0.25, 0.5)
+        // The left screen is centered at (0.25, 0.5)
         glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
             distParams.LensCenterX + distParams.lensOff, distParams.LensCenterY);
 
         glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
             distParams.ScreenCenterX, distParams.ScreenCenterY);
 
-        /// The right screen is centered at (0.75, 0.5)
+        // The right screen is centered at (0.75, 0.5)
         if (eyeParams.Eye == OVR::Util::Render::StereoEye_Right)
         {
             glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
@@ -191,9 +191,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         }
         
         glUniform2f(getUniLoc(m_progRiftDistortion, "Scale"),
-            //pDistortion->Scale,
-            //pDistortion->Scale
-            0.145806f,  0.233290f);
+            distParams.ScaleX,  distParams.ScaleY);
 
         glUniform2f(getUniLoc(m_progRiftDistortion, "ScaleIn"),
             //pDistortion->Scale,
