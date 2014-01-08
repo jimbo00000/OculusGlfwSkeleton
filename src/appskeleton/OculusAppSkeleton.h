@@ -65,8 +65,6 @@ protected:
     void AccumulateInputs(float dt);
     void AssembleViewMatrix();
 
-    OVRkill m_ok;
-
     /// VR view parameters
     const OVR::Vector3f UpVector;
     const OVR::Vector3f ForwardVector;
@@ -103,7 +101,8 @@ protected:
     int modifier_mode;
     int m_keyStates[GLFW_KEY_LAST];
 
-    Scene m_scene;
+    OVRkill m_ok;
+    Scene   m_scene;
 
     GLuint m_avatarProg;
     bool   m_displaySceneInControl;
