@@ -178,9 +178,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
 
         /// The left screen is centered at (0.25, 0.5)
         glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
-            //pDistortion->XCenterOffset,
-            //pDistortion->YCenterOffset
-            0.25f + lensOff, 0.5f);
+            distParams.LensCenterX + lensOff, distParams.LensCenterY);
 
         glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
             0.25f, 0.5f);

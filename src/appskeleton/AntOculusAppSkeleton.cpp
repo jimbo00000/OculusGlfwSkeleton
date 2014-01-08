@@ -57,9 +57,14 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarRW(m_bar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
 
+    // HMD params passed to OVR Post Process Distortion shader
+    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
+               " label='lensOff'     min=0 max=0.1 step=0.001 group=HMD ");
+    TwAddVarRW(m_bar, "LensCenterX", TW_TYPE_FLOAT, &m_riftDist.LensCenterX,
+               " label='LensCenterX' min=0 max=1.0 step=0.01 group=HMD ");
+    TwAddVarRW(m_bar, "LensCenterY", TW_TYPE_FLOAT, &m_riftDist.LensCenterY,
+               " label='LensCenterY' min=0 max=1.0 step=0.01 group=HMD ");
 
-    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist,
-               " label='lensOff' min=0 max=0.1 step=0.001 help='lensOff' group=HMD ");
     TwAddButton(m_bar, "ResetDistortion", ResetDistortion, &m_riftDist,
         " label='ResetDistortion' group='HMD' ");
 

@@ -8,8 +8,12 @@
 struct RiftDistortionParams
 {
     float lensOff;
+    float LensCenterX;
+    float LensCenterY;
     RiftDistortionParams()
         : lensOff(0.287994f - 0.25f)
+        , LensCenterX(0.25f)
+        , LensCenterY(0.50f)
     {}
 };
 
