@@ -50,7 +50,7 @@ GLuint CreateOVRShaders()
 }
 
 
-///@note Remember that initialization here depends on Gl context state.
+///@note Remember that initialization here depends on GL context state.
 /// Shaders and buffers are created later.
 OVRkill::OVRkill()
 : m_pManager(NULL)
@@ -75,7 +75,7 @@ OVRkill::~OVRkill()
 
 void OVRkill::DestroyOVR()
 {
-    /// Clear these before calling Destroy.
+    // Clear these before calling Destroy.
     m_pSensor.Clear();
     m_pManager.Clear();
     m_pHMD.Clear();
@@ -149,9 +149,6 @@ void OVRkill::PresentFbo_NoDistortion() const
     glUseProgram(0);
 }
 
-
-///@todo It would be pretty cool here to get all these parameters hooked up properly to some set
-/// of controls and config files for custimizing...
 void OVRkill::PresentFbo_PostProcessDistortion(
     const OVR::Util::Render::StereoEyeParams& eyeParams,
     const RiftDistortionParams& distParams) const
@@ -162,7 +159,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
 
     glUseProgram(m_progRiftDistortion);
     {
-        /// Set uniforms
+        // Set uniforms for distortion shader
         OVR::Matrix4f ident;
         glUniformMatrix4fv(getUniLoc(m_progRiftDistortion, "View"), 1, false, &ident.Transposed().M[0][0]);
         glUniformMatrix4fv(getUniLoc(m_progRiftDistortion, "Texm"), 1, false, &ident.Transposed().M[0][0]);
@@ -207,7 +204,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         glBindTexture(GL_TEXTURE_2D, m_renderBuffer.tex);
         glUniform1i(getUniLoc(m_progRiftDistortion, "Texture0"), 0);
 
-        float verts[] = { /// Left eye coords
+        float verts[] = { // Left eye coords
             -1.0f, -1.0f,
              0.0f, -1.0f,
              0.0f,  1.0f,
@@ -220,7 +217,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
             0.0f, 0.0f,
         };
 
-        /// Adjust coords for right eye
+        // Adjust coords for right eye
         if (eyeParams.Eye == OVR::Util::Render::StereoEye_Right)
         {
             verts[2*0  ] += 1.0f;
@@ -233,7 +230,6 @@ void OVRkill::PresentFbo_PostProcessDistortion(
             texs[2*2] += 0.5f;
             texs[2*3] += 0.5f;
         }
-
 
         const unsigned int tris[] = {
             0,1,2,  0,2,3, // ccw
@@ -275,7 +271,7 @@ void OVRkill::UpdateEyeParams()
     m_ReyeParams = m_SConfig.GetEyeRenderParams(OVR::Util::Render::StereoEye_Right);
 }
 
-/// Init OVR
+/// Call OVR setup routines to get HMD info from the first available HMD.
 void OVRkill::InitOVR()
 {
     OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
@@ -283,9 +279,8 @@ void OVRkill::InitOVR()
     m_pHMD  = *m_pManager->EnumerateDevices<OVR::HMDDevice>().CreateDevice();
     if (m_pHMD == NULL)
     {
-        /// If the HMD is turned off or not present, fill in some halfway sensible
-        /// default values here so we can at least see some rendering.
-        ///@todo Grab these values from the HMD setup, see how we did on guesing
+        // These default values were copied from the Rift DK1 and will be
+        // used when no Rift is present so output looks sane.
         OVR::HMDInfo& hmd = m_HMDInfo;
         hmd.DesktopX = 0;
         hmd.DesktopY = 0;
@@ -350,8 +345,8 @@ void OVRkill::InitOVR()
             m_SConfig.SetDistortionFitPointVP(0.0f, 1.0f);
     }
     m_SConfig.Set2DAreaFov(OVR::DegreeToRad(85.0f));
-    
-    /// For OVR distortion correction shader
+
+    // For OVR distortion correction shader
     const float renderBufferScaleIncrease = m_SConfig.GetDistortionScale();
     m_fboWidth = (int)((renderBufferScaleIncrease) * (float)m_windowWidth );
     m_fboHeight = (int)((renderBufferScaleIncrease) * (float)m_windowHeight );
