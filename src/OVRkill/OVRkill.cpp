@@ -183,11 +183,11 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         // The right screen is centered at (0.75, 0.5)
         if (eyeParams.Eye == OVR::Util::Render::StereoEye_Right)
         {
-            glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
-                0.75f, 0.5f);
-            
             glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
-                0.75f - distParams.lensOff, 0.5f);
+                1.0f - (distParams.LensCenterX + distParams.lensOff), distParams.LensCenterY);
+
+            glUniform2f(getUniLoc(m_progRiftDistortion, "ScreenCenter"),
+                1.0f - distParams.ScreenCenterX, distParams.ScreenCenterY);
         }
         
         glUniform2f(getUniLoc(m_progRiftDistortion, "Scale"),
