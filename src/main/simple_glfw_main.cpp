@@ -1,4 +1,4 @@
-// simple_glfw_skeleton.cpp
+// simple_glfw_main.cpp
 // GLFW Skeleton for the basic Oculus Rift/OVR OpenGL app.
 
 #ifdef _WIN32
