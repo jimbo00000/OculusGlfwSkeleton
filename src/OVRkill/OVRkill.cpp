@@ -243,7 +243,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEy
 
 
         const unsigned int tris[] = {
-            0,1,2,  0,3,2, // ccw
+            0,1,2,  0,2,3, // ccw
         };
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
