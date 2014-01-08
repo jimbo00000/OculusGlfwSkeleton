@@ -14,6 +14,8 @@ struct RiftDistortionParams
     float ScreenCenterY;
     float ScaleX;
     float ScaleY;
+    float ScaleInX;
+    float ScaleInY;
 
     RiftDistortionParams()
         : lensOff(0.287994f - 0.25f) // this value ripped from the TinyRoom demo at runtime
@@ -23,6 +25,8 @@ struct RiftDistortionParams
         , ScreenCenterY(0.5f)
         , ScaleX(0.145806f)
         , ScaleY(0.233290f)
+        , ScaleInX(4.0f)
+        , ScaleInY(2.5f)
     {}
 };
 

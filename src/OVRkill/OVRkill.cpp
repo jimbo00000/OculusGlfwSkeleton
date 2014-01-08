@@ -194,9 +194,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(
             distParams.ScaleX,  distParams.ScaleY);
 
         glUniform2f(getUniLoc(m_progRiftDistortion, "ScaleIn"),
-            //pDistortion->Scale,
-            //pDistortion->Scale
-            4.0f, 2.5f);
+            distParams.ScaleInX, distParams.ScaleInY);
 
         glUniform4f(getUniLoc(m_progRiftDistortion, "HmdWarpParam"),
             pDistortion->K[0],
