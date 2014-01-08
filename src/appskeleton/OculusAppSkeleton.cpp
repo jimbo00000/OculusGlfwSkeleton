@@ -42,6 +42,7 @@ OculusAppSkeleton::OculusAppSkeleton()
 , m_scene()
 , m_avatarProg(0)
 , m_displaySceneInControl(true)
+, m_riftDist()
 {
     memset(m_keyStates, 0, GLFW_KEY_LAST*sizeof(int));
 }
@@ -561,5 +562,5 @@ void OculusAppSkeleton::display(bool useOculus) const
     glDisable(GL_DEPTH_TEST);
 
     const OVRkill::PostProcessType post = useOculus ? OVRkill::PostProcess_Distortion : OVRkill::PostProcess_None;
-    m_ok.PresentFbo(post);
+    m_ok.PresentFbo(post, m_riftDist);
 }

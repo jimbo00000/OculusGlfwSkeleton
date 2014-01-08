@@ -5,12 +5,20 @@
 #include "OVR.h"
 #include "FBO.h"
 
+struct RiftDistortionParams
+{
+    float lensOff;
+    RiftDistortionParams()
+        : lensOff(0.287994f - 0.25f)
+    {}
+};
+
 ///@brief The OVRkill class is instantiated once globally and exists to push as much
 /// code as possible out of the app skeleton main source file.
 class OVRkill
 {
 public:
-    /// Stereo viewing parameters
+    // Stereo viewing parameters
     enum PostProcessType
     {
         PostProcess_None,
@@ -38,9 +46,13 @@ public:
     void BindRenderBuffer() const;
     void UnBindRenderBuffer() const;
 
-    void PresentFbo(PostProcessType post) const;
+    void PresentFbo(
+        PostProcessType post,
+        const RiftDistortionParams& distParams) const;
     void PresentFbo_NoDistortion() const;
-    void PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEyeParams& eyeParams) const;
+    void PresentFbo_PostProcessDistortion(
+        const OVR::Util::Render::StereoEyeParams& eyeParams,
+        const RiftDistortionParams& distParams) const;
 
     enum DisplayMode
     {
@@ -52,7 +64,7 @@ public:
     void SetDisplayMode(DisplayMode);
 
 protected:
-    /// OVR hardware
+    // OVR hardware
     OVR::Ptr<OVR::DeviceManager>  m_pManager;
     OVR::Ptr<OVR::HMDDevice>      m_pHMD;
     OVR::Ptr<OVR::SensorDevice>   m_pSensor;
@@ -63,7 +75,7 @@ protected:
     OVR::Util::Render::StereoEyeParams m_ReyeParams;
     OVR::Util::Render::StereoConfig    m_SConfig;
 
-    /// Render buffer for OVR distortion correction shader
+    // Render buffer for OVR distortion correction shader
     FBO m_renderBuffer;
     int m_fboWidth;
     int m_fboHeight;

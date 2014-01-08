@@ -152,7 +152,9 @@ void OVRkill::PresentFbo_NoDistortion() const
 
 ///@todo It would be pretty cool here to get all these parameters hooked up properly to some set
 /// of controls and config files for custimizing...
-void OVRkill::PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEyeParams& eyeParams) const
+void OVRkill::PresentFbo_PostProcessDistortion(
+    const OVR::Util::Render::StereoEyeParams& eyeParams,
+    const RiftDistortionParams& distParams) const
 {
     const OVR::Util::Render::DistortionConfig*  pDistortion = eyeParams.pDistortion;
     if (pDistortion == NULL)
@@ -172,7 +174,7 @@ void OVRkill::PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEy
         //"uniform vec4 HmdWarpParam;\n"
         
         /// this value ripped from the TinyRoom demo at runtime
-        const float lensOff = 0.287994f - 0.25f;
+        const float lensOff = distParams.lensOff; //0.287994f - 0.25f;
 
         /// The left screen is centered at (0.25, 0.5)
         glUniform2f(getUniLoc(m_progRiftDistortion, "LensCenter"),
@@ -263,12 +265,12 @@ void OVRkill::PresentFbo_PostProcessDistortion(const OVR::Util::Render::StereoEy
     glUseProgram(0);
 }
 
-void OVRkill::PresentFbo(PostProcessType post) const
+void OVRkill::PresentFbo(PostProcessType post, const RiftDistortionParams& distParams) const
 {
     if (post == PostProcess_Distortion)
     {
-        PresentFbo_PostProcessDistortion(m_LeyeParams);
-        PresentFbo_PostProcessDistortion(m_ReyeParams);
+        PresentFbo_PostProcessDistortion(m_LeyeParams, distParams);
+        PresentFbo_PostProcessDistortion(m_ReyeParams, distParams);
     }
     else
     {

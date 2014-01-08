@@ -107,6 +107,9 @@ protected:
     GLuint m_avatarProg;
     bool   m_displaySceneInControl;
 
+public:
+    RiftDistortionParams  m_riftDist;
+
 private: // Disallow copy ctor and assignment operator
     OculusAppSkeleton(const OculusAppSkeleton&);
     OculusAppSkeleton& operator=(const OculusAppSkeleton&);

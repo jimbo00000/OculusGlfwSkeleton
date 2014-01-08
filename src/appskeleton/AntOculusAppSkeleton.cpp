@@ -44,6 +44,12 @@ void AntOculusAppSkeleton::_InitializeBar()
 
     TwAddVarRW(m_bar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
+
+
+    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
+               " label='lensOff' min=0 max=0.1 step=0.001 help='lensOff' group=HMD ");
+    
+
 }
 #endif
 
