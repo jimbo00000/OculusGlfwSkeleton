@@ -116,7 +116,7 @@ ADD_LIBRARY( OVRkill     ${OVRKILL_SOURCE_FILES} )
 ADD_LIBRARY( AppSkeleton ${APPSKELETON_SOURCE_FILES} )
 
 ADD_EXECUTABLE( ${PROJECT_NAME}
-    src/skeleton/simple_glfw_skeleton.cpp
+    src/main/simple_glfw_skeleton.cpp
     )
 
 TARGET_LINK_LIBRARIES( ${PROJECT_NAME}
