@@ -17,8 +17,8 @@
 
 
 AppSkeleton::AppSkeleton()
-: m_windowWidth(640)
-, m_windowHeight(400)
+: m_windowWidth(1000)
+, m_windowHeight(800)
 {
 }
 
