@@ -39,10 +39,10 @@ OculusAppSkeleton::OculusAppSkeleton()
 , which_button(-1)
 , modifier_mode(0)
 , m_ok()
+, m_riftDist()
 , m_scene()
 , m_avatarProg(0)
 , m_displaySceneInControl(true)
-, m_riftDist()
 {
     memset(m_keyStates, 0, GLFW_KEY_LAST*sizeof(int));
 }
@@ -526,7 +526,7 @@ void OculusAppSkeleton::display(bool useOculus) const
             /// Remember DX and OpenGL use transposed conventions. And doesn't DX use left-handed coords?
             OVR::Matrix4f mview = m_controlView;
             OVR::Matrix4f persp = OVR::Matrix4f::PerspectiveRH(
-                m_viewAngleDeg * M_PI / 180.0f,
+                m_viewAngleDeg * (float)M_PI / 180.0f,
                 (float)m_windowWidth/(float)m_windowHeight,
                 0.004f,
                 500.0f);

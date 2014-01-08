@@ -102,13 +102,12 @@ protected:
     int m_keyStates[GLFW_KEY_LAST];
 
     OVRkill m_ok;
+    RiftDistortionParams  m_riftDist;
     Scene   m_scene;
 
     GLuint m_avatarProg;
     bool   m_displaySceneInControl;
 
-public:
-    RiftDistortionParams  m_riftDist;
 
 private: // Disallow copy ctor and assignment operator
     OculusAppSkeleton(const OculusAppSkeleton&);
