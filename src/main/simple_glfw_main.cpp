@@ -33,6 +33,22 @@ struct OutputStream {
     OVRkill::DisplayMode outtype;
 };
 
+void CycleOutputType(OutputStream& os)
+{
+    if (os.outtype == OVRkill::SingleEye)
+    {
+        os.outtype = OVRkill::Stereo;
+    }
+    else if (os.outtype == OVRkill::Stereo)
+    {
+        os.outtype = OVRkill::StereoWithDistortion;
+    }
+    else
+    {
+        os.outtype = OVRkill::SingleEye;
+    }
+}
+
 std::vector<OutputStream> g_outStreams;
 
 Timer g_timer;
@@ -78,25 +94,24 @@ void handleMonitorConfigurationKeystrokes(int key)
     if (g_outStreams.empty())
         return;
 
-    if (g_outStreams.size() == 1)
+    switch (key)
     {
-        OutputStream& os = g_outStreams.front();
-        switch (key)
-        { default: break;
-        case GLFW_KEY_F1: os.outtype = OVRkill::SingleEye; break;
-        case GLFW_KEY_F2: os.outtype = OVRkill::Stereo; break;
-        case GLFW_KEY_F3: os.outtype = OVRkill::StereoWithDistortion; break;
-        }
-    }
-    else if (g_outStreams.size() > 1)
-    {
-        OutputStream& os = g_outStreams[1];
-        switch (key)
-        { default: break;
-        case GLFW_KEY_F1: os.outtype = OVRkill::SingleEye; break;
-        case GLFW_KEY_F2: os.outtype = OVRkill::Stereo; break;
-        case GLFW_KEY_F3: os.outtype = OVRkill::StereoWithDistortion; break;
-        }
+    default: break;
+
+    case GLFW_KEY_F1:
+        if (g_outStreams.size() >= 1)
+            CycleOutputType(g_outStreams[0]);
+        break;
+
+    case GLFW_KEY_F2:
+        if (g_outStreams.size() >= 2)
+            CycleOutputType(g_outStreams[1]);
+        break;
+
+    case GLFW_KEY_F3:
+        if (g_outStreams.size() >= 3)
+            CycleOutputType(g_outStreams[2]);
+        break;
     }
 }
 
@@ -111,7 +126,10 @@ void keyboard(GLFWwindow* pWindow, int key, int codes, int action, int mods)
         break;
     }
 
-    handleMonitorConfigurationKeystrokes(key);
+    if (action == GLFW_PRESS)
+    {
+        handleMonitorConfigurationKeystrokes(key);
+    }
 
     g_app.keyboard(key, action, 0,0);
 }

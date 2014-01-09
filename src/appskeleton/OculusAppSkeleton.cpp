@@ -408,26 +408,6 @@ void OculusAppSkeleton::keyboard(int key, int action, int x, int y)
 
     switch (key)
     {
-    case GLFW_KEY_ESCAPE:
-        exit(0);
-        break;
-
-    case GLFW_KEY_F1:
-        m_ok.SetDisplayMode(OVRkill::SingleEye);
-        break;
-
-    case GLFW_KEY_F2:
-        m_ok.SetDisplayMode(OVRkill::Stereo);
-        break;
-
-    case GLFW_KEY_F3:
-        m_ok.SetDisplayMode(OVRkill::StereoWithDistortion);
-        break;
-
-    case GLFW_KEY_F4:
-        m_ok.SetDisplayMode(OVRkill::SingleEye);
-        break;
-
     case 'Z':
         m_displaySceneInControl = !m_displaySceneInControl;
         break;
