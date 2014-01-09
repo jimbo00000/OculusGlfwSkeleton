@@ -550,7 +550,9 @@ void OculusAppSkeleton::display(bool useOculus, OVRkill::DisplayMode mode) const
 
     m_ok.BindRenderBuffer();
     {
-        DrawScene(useOculus, mode);
+        bool useStereo = (mode == OVRkill::Stereo) ||
+                         (mode == OVRkill::StereoWithDistortion);
+        DrawScene(useStereo, mode);
     }
     m_ok.UnBindRenderBuffer();
 
@@ -558,7 +560,7 @@ void OculusAppSkeleton::display(bool useOculus, OVRkill::DisplayMode mode) const
     glDisable(GL_DEPTH_TEST);
 
     OVRkill::PostProcessType post = OVRkill::PostProcess_None;
-    if ((useOculus) && (mode == OVRkill::StereoWithDistortion))
+    if (mode == OVRkill::StereoWithDistortion)
     {
         post = OVRkill::PostProcess_Distortion;
     }

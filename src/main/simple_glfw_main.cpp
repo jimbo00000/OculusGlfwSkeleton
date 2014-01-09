@@ -67,7 +67,7 @@ void display()
         glfwGetWindowSize(pWin, &width, &height);
 
         glViewport(0,0, width, height);
-        g_app.display(os.outtype != OVRkill::SingleEye, os.outtype);
+        g_app.display(false, os.outtype);
         glfwSwapBuffers(pWin);
     }
 }
