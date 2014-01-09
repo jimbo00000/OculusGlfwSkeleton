@@ -493,6 +493,68 @@ void OculusAppSkeleton::DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR:
     }
 }
 
+void OculusAppSkeleton::DrawScene(bool stereo) const
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    const int fboWidth = m_ok.GetRenderBufferWidth();
+    const int fboHeight = m_ok.GetRenderBufferHeight();
+    const int halfWidth = fboWidth/2;
+    if (stereo)
+    {
+        const OVR::HMDInfo& hmd = m_ok.GetHMD();
+        // Compute Aspect Ratio. Stereo mode cuts width in half.
+        float aspectRatio = float(hmd.HResolution * 0.5f) / float(hmd.VResolution);
+
+        // Compute Vertical FOV based on distance.
+        float halfScreenDistance = (hmd.VScreenSize / 2);
+        float yfov = 2.0f * atan(halfScreenDistance/hmd.EyeToScreenDistance);
+
+        // Post-projection viewport coordinates range from (-1.0, 1.0), with the
+        // center of the left viewport falling at (1/4) of horizontal screen size.
+        // We need to shift this projection center to match with the lens center.
+        // We compute this shift in physical units (meters) to correct
+        // for different screen sizes and then rescale to viewport coordinates.
+        float viewCenterValue = hmd.HScreenSize * 0.25f;
+        float eyeProjectionShift = viewCenterValue - hmd.LensSeparationDistance * 0.5f;
+        float projectionCenterOffset = 4.0f * eyeProjectionShift / hmd.HScreenSize;
+
+        // Projection matrix for the "center eye", which the left/right matrices are based on.
+        OVR::Matrix4f projCenter = OVR::Matrix4f::PerspectiveRH(yfov, aspectRatio, 0.3f, 1000.0f);
+        OVR::Matrix4f projLeft   = OVR::Matrix4f::Translation(projectionCenterOffset, 0, 0) * projCenter;
+        OVR::Matrix4f projRight  = OVR::Matrix4f::Translation(-projectionCenterOffset, 0, 0) * projCenter;
+        
+        // m_oculusView transformation translation in world units.
+        float halfIPD = hmd.InterpupillaryDistance * 0.5f;
+        OVR::Matrix4f viewLeft = OVR::Matrix4f::Translation(halfIPD, 0, 0) * m_oculusView;
+        OVR::Matrix4f viewRight= OVR::Matrix4f::Translation(-halfIPD, 0, 0) * m_oculusView;
+
+        glViewport(0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
+        glScissor (0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
+        m_scene.RenderForOneEye(viewLeft, projLeft);
+
+        glViewport(halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
+        glScissor (halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
+        m_scene.RenderForOneEye(viewRight, projRight);
+    }
+    else
+    {
+        /// Set up our 3D transformation matrices
+        /// Remember DX and OpenGL use transposed conventions. And doesn't DX use left-handed coords?
+        OVR::Matrix4f mview = m_controlView;
+        OVR::Matrix4f persp = OVR::Matrix4f::PerspectiveRH(
+            m_viewAngleDeg * (float)M_PI / 180.0f,
+            (float)m_windowWidth/(float)m_windowHeight,
+            0.004f,
+            500.0f);
+
+        glViewport(0,0,(GLsizei)fboWidth, (GLsizei)fboHeight);
+        m_scene.RenderForOneEye(mview, persp);
+
+        DrawFrustumAvatar(mview, persp);
+    }
+}
+
 /// Set up view matrices, then draw scene
 void OculusAppSkeleton::display(bool useOculus) const
 {
@@ -508,64 +570,7 @@ void OculusAppSkeleton::display(bool useOculus) const
 
     m_ok.BindRenderBuffer();
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        const int fboWidth = m_ok.GetRenderBufferWidth();
-        const int fboHeight = m_ok.GetRenderBufferHeight();
-        const int halfWidth = fboWidth/2;
-        if (useOculus)
-        {
-            const OVR::HMDInfo& hmd = m_ok.GetHMD();
-            // Compute Aspect Ratio. Stereo mode cuts width in half.
-            float aspectRatio = float(hmd.HResolution * 0.5f) / float(hmd.VResolution);
-
-            // Compute Vertical FOV based on distance.
-            float halfScreenDistance = (hmd.VScreenSize / 2);
-            float yfov = 2.0f * atan(halfScreenDistance/hmd.EyeToScreenDistance);
-
-            // Post-projection viewport coordinates range from (-1.0, 1.0), with the
-            // center of the left viewport falling at (1/4) of horizontal screen size.
-            // We need to shift this projection center to match with the lens center.
-            // We compute this shift in physical units (meters) to correct
-            // for different screen sizes and then rescale to viewport coordinates.
-            float viewCenterValue = hmd.HScreenSize * 0.25f;
-            float eyeProjectionShift = viewCenterValue - hmd.LensSeparationDistance * 0.5f;
-            float projectionCenterOffset = 4.0f * eyeProjectionShift / hmd.HScreenSize;
-
-            // Projection matrix for the "center eye", which the left/right matrices are based on.
-            OVR::Matrix4f projCenter = OVR::Matrix4f::PerspectiveRH(yfov, aspectRatio, 0.3f, 1000.0f);
-            OVR::Matrix4f projLeft   = OVR::Matrix4f::Translation(projectionCenterOffset, 0, 0) * projCenter;
-            OVR::Matrix4f projRight  = OVR::Matrix4f::Translation(-projectionCenterOffset, 0, 0) * projCenter;
-        
-            // m_oculusView transformation translation in world units.
-            float halfIPD = hmd.InterpupillaryDistance * 0.5f;
-            OVR::Matrix4f viewLeft = OVR::Matrix4f::Translation(halfIPD, 0, 0) * m_oculusView;
-            OVR::Matrix4f viewRight= OVR::Matrix4f::Translation(-halfIPD, 0, 0) * m_oculusView;
-
-            glViewport(0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-            glScissor (0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-            m_scene.RenderForOneEye(viewLeft, projLeft);
-
-            glViewport(halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-            glScissor (halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-            m_scene.RenderForOneEye(viewRight, projRight);
-        }
-        else
-        {
-            /// Set up our 3D transformation matrices
-            /// Remember DX and OpenGL use transposed conventions. And doesn't DX use left-handed coords?
-            OVR::Matrix4f mview = m_controlView;
-            OVR::Matrix4f persp = OVR::Matrix4f::PerspectiveRH(
-                m_viewAngleDeg * (float)M_PI / 180.0f,
-                (float)m_windowWidth/(float)m_windowHeight,
-                0.004f,
-                500.0f);
-
-            glViewport(0,0,(GLsizei)fboWidth, (GLsizei)fboHeight);
-            m_scene.RenderForOneEye(mview, persp);
-
-            DrawFrustumAvatar(mview, persp);
-        }
+        DrawScene(useOculus);
     }
     m_ok.UnBindRenderBuffer();
 
