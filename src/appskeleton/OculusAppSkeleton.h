@@ -52,6 +52,7 @@ public:
 
     int GetOculusWidth() const { return m_ok.GetOculusWidth(); }
     int GetOculusHeight() const { return m_ok.GetOculusHeight(); }
+    void ResizeFbo();
 
     OVR::Matrix4f GetRollPitchYaw() const {
         return OVR::Matrix4f::RotationY(EyeYaw) *

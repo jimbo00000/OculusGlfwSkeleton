@@ -19,7 +19,7 @@ AntOculusAppSkeleton::~AntOculusAppSkeleton()
 
 #ifdef USE_ANTTWEAKBAR
 
-static void TW_CALL ResetDistortion(void *clientData)
+static void TW_CALL ResetDistortionParams(void *clientData)
 {
     if (clientData)
     {
@@ -37,6 +37,14 @@ static void TW_CALL GetDistortionFboWidth(void *value, void *clientData)
 static void TW_CALL GetDistortionFboHeight(void *value, void *clientData)
 {
     *static_cast<int *>(value) = static_cast<const OVRkill *>(clientData)->GetRenderBufferHeight();
+}
+
+static void TW_CALL ReallocateDistortionFbo(void *clientData)
+{
+    if (clientData)
+    {
+        static_cast<AntOculusAppSkeleton *>(clientData)->ResizeFbo();
+    }
 }
 
 
@@ -89,8 +97,8 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarRW(m_bar, "ScaleInY", TW_TYPE_FLOAT, &m_riftDist.ScaleInY,
                " label='ScaleInY' min=0 max=10.0 step=0.1 group=HMD ");
 
-    TwAddButton(m_bar, "ResetDistortion", ResetDistortion, &m_riftDist,
-        " label='ResetDistortion' group='HMD' ");
+    TwAddButton(m_bar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
+        " label='ResetDistortionParams' group='HMD' ");
 
     TwAddSeparator(m_bar, NULL, " group='HMD' ");
 
@@ -98,9 +106,12 @@ void AntOculusAppSkeleton::_InitializeBar()
         "precision=0 group='HMD' ");
     TwAddVarCB(m_bar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
         "precision=0 group='HMD' ");
-
+    
     TwAddVarRW(m_bar, "FBO ScaleUp", TW_TYPE_FLOAT, &m_bufferScaleUp,
                " label='FBO ScaleUp' min=0.25 max=4.0 step=0.01 group=HMD ");
+
+   TwAddButton(m_bar, "ResetDistortionFBO", ReallocateDistortionFbo, this,
+        " label='ResetDistortionFBO' group='HMD' ");
 
 }
 #endif

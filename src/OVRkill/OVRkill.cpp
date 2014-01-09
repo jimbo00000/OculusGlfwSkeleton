@@ -90,8 +90,12 @@ void OVRkill::CreateShaders()
     m_progRiftDistortion = CreateOVRShaders();
 }
 
-void OVRkill::CreateRenderBuffer()
+void OVRkill::CreateRenderBuffer(float bufferScaleUp)
 {
+    deallocateFBO(m_renderBuffer);
+
+    m_fboWidth = (int)((bufferScaleUp) * (float)m_windowWidth );
+    m_fboHeight = (int)((bufferScaleUp) * (float)m_windowHeight );
     allocateFBO(m_renderBuffer, m_fboWidth, m_fboHeight);
 }
 

@@ -59,7 +59,7 @@ public:
     void InitOVR();
     void DestroyOVR();
     void CreateShaders();
-    void CreateRenderBuffer();
+    void CreateRenderBuffer(float bufferScaleUp);
     void UpdateEyeParams();
     void BindRenderBuffer() const;
     void UnBindRenderBuffer() const;

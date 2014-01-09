@@ -55,6 +55,20 @@ OculusAppSkeleton::~OculusAppSkeleton()
     glfwTerminate();
 }
 
+bool OculusAppSkeleton::initVR(bool fullScreen)
+{
+    m_ok.InitOVR();
+    m_ok.SetDisplayMode(OVRkill::StereoWithDistortion);
+    m_bufferScaleUp = m_ok.GetRenderBufferScaleIncrease();
+
+    return true;
+}
+
+void OculusAppSkeleton::ResizeFbo()
+{
+    m_ok.CreateRenderBuffer(m_bufferScaleUp);
+}
+
 bool OculusAppSkeleton::initGL(int argc, char **argv)
 {
     bool ret = AppSkeleton::initGL(argc, argv); /// calls _InitShaders
@@ -65,18 +79,9 @@ bool OculusAppSkeleton::initGL(int argc, char **argv)
         m_avatarProg = makeShaderByName("avatar");
     }
     m_ok.CreateShaders();
-    m_ok.CreateRenderBuffer();
+    m_ok.CreateRenderBuffer(m_bufferScaleUp);
 
     return ret;
-}
-
-bool OculusAppSkeleton::initVR(bool fullScreen)
-{
-    m_ok.InitOVR();
-    m_ok.SetDisplayMode(OVRkill::StereoWithDistortion);
-    m_bufferScaleUp = m_ok.GetRenderBufferScaleIncrease();
-
-    return true;
 }
 
 ///@brief Check out what joysticks we have and select a preferred one
