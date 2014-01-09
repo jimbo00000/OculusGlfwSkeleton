@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 #ifdef USE_CUDA
 #else
@@ -26,34 +27,39 @@ AntOculusAppSkeleton g_app;
 
 int running = 0;
 
-GLFWwindow* g_pControlWindow = NULL;
-GLFWwindow* g_pOculusWindow = NULL;
+enum OutputType
+{
+    SingleEye,
+    LeftRightStereoUndistorted,
+    LeftRightStereoBarrelDistorted,
+};
 
-GLFWmonitor* g_pPrimaryMonitor = NULL;
-GLFWmonitor* g_pOculusMonitor = NULL;
+struct OutputStream {
+    GLFWwindow*  pWindow;
+    GLFWmonitor* pMonitor;
+    OutputType   outtype;
+};
+
+std::vector<OutputStream> g_outStreams;
 
 Timer g_timer;
 
 void display()
 {
-    /// display control window
-    if (g_pControlWindow != NULL)
+    for (std::vector<OutputStream>::const_iterator it = g_outStreams.begin();
+        it != g_outStreams.end();
+        ++it)
     {
-        glfwMakeContextCurrent(g_pControlWindow);
+        const OutputStream& os = *it;
+        GLFWwindow* pWin = os.pWindow;
+        glfwMakeContextCurrent(pWin);
 
-        glViewport(0,0, g_app.w(), g_app.h());
-        g_app.display(false);
-        glfwSwapBuffers(g_pControlWindow);
-    }
+        int width, height;
+        glfwGetWindowSize(pWin, &width, &height);
 
-    /// Display Oculus window - for best results have no windows on your extended Win7 desktop.
-    if (g_pOculusWindow != NULL)
-    {
-        glfwMakeContextCurrent(g_pOculusWindow);
-
-        glViewport(0,0,(GLsizei)g_app.GetOculusWidth(), (GLsizei)g_app.GetOculusHeight());
-        g_app.display(true);
-        glfwSwapBuffers(g_pOculusWindow);
+        glViewport(0,0, width, height);
+        g_app.display(os.outtype!=SingleEye);
+        glfwSwapBuffers(pWin);
     }
 }
 
@@ -76,6 +82,26 @@ void mouseWheel(GLFWwindow* pWindow, double x, double y)
 
 void keyboard(GLFWwindow* pWindow, int key, int codes, int action, int mods)
 {
+    switch (key)
+    {
+    case GLFW_KEY_ESCAPE:
+        exit(0);
+        break;
+
+    case GLFW_KEY_F1:
+        if (g_outStreams.size() > 1)
+            g_outStreams[1].outtype = SingleEye;
+        break;
+    case GLFW_KEY_F2:
+        if (g_outStreams.size() > 1)
+            g_outStreams[1].outtype = LeftRightStereoUndistorted;
+        break;
+    case GLFW_KEY_F3:
+        if (g_outStreams.size() > 1)
+            g_outStreams[1].outtype = LeftRightStereoBarrelDistorted;
+        break;
+    }
+
     g_app.keyboard(key, action, 0,0);
 }
 
@@ -115,21 +141,13 @@ void IdentifyMonitors()
             continue;
         const GLFWvidmode* mode = glfwGetVideoMode(pMonitor);
 
-        /// Take a guess at which is the Oculus by resolution
-        if (
-            (mode->width  == g_app.GetOculusWidth()) &&
-            (mode->height == g_app.GetOculusHeight())
-            )
-        {
-            g_pOculusMonitor = pMonitor;
-        }
-        else if (g_pPrimaryMonitor == NULL)
-        {
-            /// Guess that the first (probably)non-Oculus monitor is primary.
-            ///@note The multi-monitor setup requires the two screens to be aligned along their top edge
-            /// with the Oculus monitor to the right of the primary.
-            g_pPrimaryMonitor = pMonitor;
-        }
+        // g_outStreams should be empty at this time
+        // The first thing we will do is populate the global vector with
+        // partially initialized outputStream structs - monitors only.
+        // In initGlfw they will be paired with monitors.
+        OutputStream os = {0};
+        os.pMonitor = pMonitor;
+        g_outStreams.push_back(os);
     }
 }
 
@@ -196,6 +214,28 @@ void PrintMonitorInfo()
     }
 }
 
+// Init Control window containing AntTweakBar
+GLFWwindow* InitControlWindow()
+{
+    GLFWwindow* pControlWindow = glfwCreateWindow(g_app.w(), g_app.h(), "Control Window", NULL, NULL);
+    if (!pControlWindow)
+    {
+        glfwTerminate();
+        return false;
+    }
+    glfwMakeContextCurrent(pControlWindow);
+
+    glfwSetWindowSizeCallback (pControlWindow, resize);
+    glfwSetMouseButtonCallback(pControlWindow, mouseDown);
+    glfwSetCursorPosCallback  (pControlWindow, mouseMove);
+    glfwSetScrollCallback     (pControlWindow, mouseWheel);
+    glfwSetKeyCallback        (pControlWindow, keyboard);
+    //glfwSetCharCallback       (pControlWindow, charkey);
+
+    return pControlWindow;
+}
+
+
 
 static void error_callback(int error, const char* description)
 {
@@ -214,55 +254,44 @@ bool initGlfw(int argc, char **argv, bool fullScreen)
 
     //LOG_INFO("Initializing Glfw and window @ %d x %d", m_windowWidth, m_windowHeight);
 
-    /// Init Control window containing AntTweakBar
-    {
-        g_pControlWindow = glfwCreateWindow(g_app.w(), g_app.h(), "Control Window", NULL, NULL);
-        if (!g_pControlWindow)
-        {
-            glfwTerminate();
-            return false;
-        }
-        glfwMakeContextCurrent(g_pControlWindow);
+    ///@todo We are making some assumptions about vector indices here; be more general
+    // Let's assume the first monitor in the list goes to the control window for now.
+    GLFWwindow* pControlWindow = InitControlWindow();
+    g_outStreams[0].pWindow = pControlWindow;
 
-        glfwSetWindowSizeCallback (g_pControlWindow, resize);
-        glfwSetMouseButtonCallback(g_pControlWindow, mouseDown);
-        glfwSetCursorPosCallback  (g_pControlWindow, mouseMove);
-        glfwSetScrollCallback     (g_pControlWindow, mouseWheel);
-        glfwSetKeyCallback        (g_pControlWindow, keyboard);
-        //glfwSetCharCallback       (g_pControlWindow, charkey);
-    }
-
-    /// Init secondary window
-    if (g_pOculusMonitor != NULL)
+    // Init secondary window
+    if (g_outStreams.size() > 1)
     {
-        g_pOculusWindow = glfwCreateWindow(
+        GLFWwindow* pOculusWindow = glfwCreateWindow(
             g_app.GetOculusWidth(), g_app.GetOculusHeight(),
             "Oculus Window",
             ///@note Fullscreen windows cannot be positioned. The fullscreen window over the Oculus
             /// monitor would be the preferred solution, but on Windows that fullscreen window will disappear
             /// on the first mouse input occuring outside of it, defeating the purpose of the first window.
             NULL, //g_pOculusMonitor,
-            g_pControlWindow);
+            pControlWindow); // All rift windows will share with control
 
-        if (!g_pOculusWindow)
+        if (!pOculusWindow)
         {
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
-        glfwMakeContextCurrent(g_pOculusWindow);
+        glfwMakeContextCurrent(pOculusWindow);
 
         /// Position Oculus secondary monitor pseudo-fullscreen window
-        if (g_pPrimaryMonitor != NULL)
+        if (g_outStreams[0].pMonitor != NULL)
         {
-            const GLFWvidmode* pMode = glfwGetVideoMode(g_pPrimaryMonitor);
+            const GLFWvidmode* pMode = glfwGetVideoMode(g_outStreams[0].pMonitor);
             if (pMode != NULL)
             {
-                glfwSetWindowPos(g_pOculusWindow, pMode->width, 0);
+                glfwSetWindowPos(pOculusWindow, pMode->width, 0);
             }
         }
 
-        glfwSetKeyCallback(g_pOculusWindow, keyboard);
-        glfwShowWindow(g_pOculusWindow);
+        glfwSetKeyCallback(pOculusWindow, keyboard);
+        glfwShowWindow(pOculusWindow);
+
+        g_outStreams[1].pWindow = pOculusWindow;
     }
 
     /// If we are not sharing contexts between windows, make the appropriate one current here.
@@ -295,10 +324,14 @@ int main(int argc, char *argv[])
         display();
         glfwPollEvents();
 
-        if (glfwWindowShouldClose(g_pControlWindow))
-            running = GL_FALSE;
-        if (g_pOculusWindow && glfwWindowShouldClose(g_pOculusWindow))
-            running = GL_FALSE;
+        for (std::vector<OutputStream>::const_iterator it = g_outStreams.begin();
+            it != g_outStreams.end();
+            ++it)
+        {
+            const OutputStream& os = *it;
+            if (glfwWindowShouldClose(os.pWindow))
+                running = GL_FALSE;
+        }
     }
 
     return 0;
