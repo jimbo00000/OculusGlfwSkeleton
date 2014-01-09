@@ -536,10 +536,10 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
 }
 
 /// Set up view matrices, then draw scene
-void OculusAppSkeleton::display(bool useOculus, OVRkill::DisplayMode mode) const
+void OculusAppSkeleton::display(bool isControl, OVRkill::DisplayMode mode) const
 {
     /// This may save us some frame rate
-    if (!useOculus && !m_displaySceneInControl)
+    if (isControl && !m_displaySceneInControl)
     {
         glClearColor(0,0,0,0);
         glClear(GL_COLOR_BUFFER_BIT);

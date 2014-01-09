@@ -39,7 +39,7 @@ public:
     OculusAppSkeleton();
     virtual ~OculusAppSkeleton();
 
-    virtual void display(bool useOculus=false, OVRkill::DisplayMode mode=OVRkill::SingleEye) const;
+    virtual void display(bool isControl=false, OVRkill::DisplayMode mode=OVRkill::SingleEye) const;
     virtual void mouseDown(int button, int state, int x, int y);
     virtual void mouseMove(int x, int y);
     virtual void mouseWheel(int x, int y);

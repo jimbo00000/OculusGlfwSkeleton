@@ -125,13 +125,14 @@ bool AntOculusAppSkeleton::initGL(int argc, char **argv)
     return OculusAppSkeleton::initGL(argc, argv);
 }
 
-void AntOculusAppSkeleton::display(bool useOculus, OVRkill::DisplayMode mode)
+void AntOculusAppSkeleton::display(bool isControl, OVRkill::DisplayMode mode)
 {
-    OculusAppSkeleton::display(useOculus, mode);
+    OculusAppSkeleton::display(isControl, mode);
 
 #ifdef USE_ANTTWEAKBAR
     // Displaying the maximized tweakbar is surprisingly not painfully obstrusive
     // on a mirrored 1920x1080. It can also be minimized.
+    if (isControl)
     {
         TwRefreshBar(m_bar);
         TwDraw(); ///@todo Should this go first? Will it write to a depth buffer?

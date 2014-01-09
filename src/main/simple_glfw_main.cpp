@@ -55,9 +55,10 @@ Timer g_timer;
 
 void display()
 {
+    int i=0;
     for (std::vector<OutputStream>::const_iterator it = g_outStreams.begin();
         it != g_outStreams.end();
-        ++it)
+        ++it, ++i)
     {
         const OutputStream& os = *it;
         GLFWwindow* pWin = os.pWindow;
@@ -67,7 +68,7 @@ void display()
         glfwGetWindowSize(pWin, &width, &height);
 
         glViewport(0,0, width, height);
-        g_app.display(false, os.outtype);
+        g_app.display(i==0, os.outtype);
         glfwSwapBuffers(pWin);
     }
 }
