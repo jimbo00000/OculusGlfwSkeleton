@@ -321,6 +321,7 @@ bool initGlfw(int argc, char **argv, bool fullScreen)
         glfwShowWindow(pOculusWindow);
 
         g_outStreams[1].pWindow = pOculusWindow;
+        g_outStreams[1].outtype = OVRkill::StereoWithDistortion;
     }
 
     /// If we are not sharing contexts between windows, make the appropriate one current here.
