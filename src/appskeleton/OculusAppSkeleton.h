@@ -66,6 +66,8 @@ protected:
     void AccumulateInputs(float dt);
     void AssembleViewMatrix();
 
+    void DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const;
+
     /// VR view parameters
     const OVR::Vector3f UpVector;
     const OVR::Vector3f ForwardVector;

@@ -470,6 +470,29 @@ void OculusAppSkeleton::timestep(float dt)
 ///////////////////////////////////////////////////////////////////////////////
 
 
+/// Render avatar of Oculus user
+void OculusAppSkeleton::DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
+{
+    //if (UseFollowCam)
+    const GLuint prog = m_avatarProg;
+    glUseProgram(prog);
+    {
+        OVR::Matrix4f rollPitchYaw = GetRollPitchYaw();
+        OVR::Matrix4f eyetx = mview
+            * OVR::Matrix4f::Translation(EyePos.x, EyePos.y, EyePos.z)
+            * rollPitchYaw;
+
+        glUniformMatrix4fv(getUniLoc(prog, "mvmtx"), 1, false, &eyetx.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(prog, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
+
+        glLineWidth(4.0f);
+        DrawOriginLines();
+        const float aspect = (float)GetOculusWidth() / (float)GetOculusHeight();
+        DrawViewFrustum(aspect);
+        glLineWidth(1.0f);
+    }
+}
+
 /// Set up view matrices, then draw scene
 void OculusAppSkeleton::display(bool useOculus) const
 {
@@ -541,26 +564,7 @@ void OculusAppSkeleton::display(bool useOculus) const
             glViewport(0,0,(GLsizei)fboWidth, (GLsizei)fboHeight);
             m_scene.RenderForOneEye(mview, persp);
 
-
-            /// Render avatar of Oculus user
-            //if (UseFollowCam)
-            const GLuint prog = m_avatarProg;
-            glUseProgram(prog);
-            {
-                OVR::Matrix4f rollPitchYaw = GetRollPitchYaw();
-                OVR::Matrix4f eyetx = mview
-                    * OVR::Matrix4f::Translation(EyePos.x, EyePos.y, EyePos.z)
-                    * rollPitchYaw;
-
-                glUniformMatrix4fv(getUniLoc(prog, "mvmtx"), 1, false, &eyetx.Transposed().M[0][0]);
-                glUniformMatrix4fv(getUniLoc(prog, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
-
-                glLineWidth(4.0f);
-                DrawOriginLines();
-                const float aspect = (float)GetOculusWidth() / (float)GetOculusHeight();
-                DrawViewFrustum(aspect);
-                glLineWidth(1.0f);
-            }
+            DrawFrustumAvatar(mview, persp);
         }
     }
     m_ok.UnBindRenderBuffer();
