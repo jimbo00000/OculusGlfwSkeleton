@@ -80,27 +80,45 @@ void mouseWheel(GLFWwindow* pWindow, double x, double y)
     g_app.mouseWheel((int)x, (int)y);
 }
 
+void handleMonitorConfigurationKeystrokes(int key)
+{
+    if (g_outStreams.empty())
+        return;
+
+    if (g_outStreams.size() == 1)
+    {
+        OutputStream& os = g_outStreams.front();
+        switch (key)
+        { default: break;
+        case GLFW_KEY_F1: os.outtype = SingleEye; break;
+        case GLFW_KEY_F2: os.outtype = LeftRightStereoUndistorted; break;
+        case GLFW_KEY_F3: os.outtype = LeftRightStereoBarrelDistorted; break;
+        }
+    }
+    else if (g_outStreams.size() > 1)
+    {
+        OutputStream& os = g_outStreams[1];
+        switch (key)
+        { default: break;
+        case GLFW_KEY_F1: os.outtype = SingleEye; break;
+        case GLFW_KEY_F2: os.outtype = LeftRightStereoUndistorted; break;
+        case GLFW_KEY_F3: os.outtype = LeftRightStereoBarrelDistorted; break;
+        }
+    }
+}
+
 void keyboard(GLFWwindow* pWindow, int key, int codes, int action, int mods)
 {
     switch (key)
     {
+    default: break;
+
     case GLFW_KEY_ESCAPE:
         exit(0);
         break;
-
-    case GLFW_KEY_F1:
-        if (g_outStreams.size() > 1)
-            g_outStreams[1].outtype = SingleEye;
-        break;
-    case GLFW_KEY_F2:
-        if (g_outStreams.size() > 1)
-            g_outStreams[1].outtype = LeftRightStereoUndistorted;
-        break;
-    case GLFW_KEY_F3:
-        if (g_outStreams.size() > 1)
-            g_outStreams[1].outtype = LeftRightStereoBarrelDistorted;
-        break;
     }
+
+    handleMonitorConfigurationKeystrokes(key);
 
     g_app.keyboard(key, action, 0,0);
 }
