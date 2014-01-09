@@ -27,17 +27,10 @@ AntOculusAppSkeleton g_app;
 
 int running = 0;
 
-enum OutputType
-{
-    SingleEye,
-    LeftRightStereoUndistorted,
-    LeftRightStereoBarrelDistorted,
-};
-
 struct OutputStream {
     GLFWwindow*  pWindow;
     GLFWmonitor* pMonitor;
-    OutputType   outtype;
+    OVRkill::DisplayMode outtype;
 };
 
 std::vector<OutputStream> g_outStreams;
@@ -58,7 +51,7 @@ void display()
         glfwGetWindowSize(pWin, &width, &height);
 
         glViewport(0,0, width, height);
-        g_app.display(os.outtype!=SingleEye);
+        g_app.display(os.outtype != OVRkill::SingleEye, os.outtype);
         glfwSwapBuffers(pWin);
     }
 }
@@ -90,9 +83,9 @@ void handleMonitorConfigurationKeystrokes(int key)
         OutputStream& os = g_outStreams.front();
         switch (key)
         { default: break;
-        case GLFW_KEY_F1: os.outtype = SingleEye; break;
-        case GLFW_KEY_F2: os.outtype = LeftRightStereoUndistorted; break;
-        case GLFW_KEY_F3: os.outtype = LeftRightStereoBarrelDistorted; break;
+        case GLFW_KEY_F1: os.outtype = OVRkill::SingleEye; break;
+        case GLFW_KEY_F2: os.outtype = OVRkill::Stereo; break;
+        case GLFW_KEY_F3: os.outtype = OVRkill::StereoWithDistortion; break;
         }
     }
     else if (g_outStreams.size() > 1)
@@ -100,9 +93,9 @@ void handleMonitorConfigurationKeystrokes(int key)
         OutputStream& os = g_outStreams[1];
         switch (key)
         { default: break;
-        case GLFW_KEY_F1: os.outtype = SingleEye; break;
-        case GLFW_KEY_F2: os.outtype = LeftRightStereoUndistorted; break;
-        case GLFW_KEY_F3: os.outtype = LeftRightStereoBarrelDistorted; break;
+        case GLFW_KEY_F1: os.outtype = OVRkill::SingleEye; break;
+        case GLFW_KEY_F2: os.outtype = OVRkill::Stereo; break;
+        case GLFW_KEY_F3: os.outtype = OVRkill::StereoWithDistortion; break;
         }
     }
 }

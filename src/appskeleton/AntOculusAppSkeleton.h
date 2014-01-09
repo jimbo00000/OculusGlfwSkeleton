@@ -22,6 +22,7 @@
 #endif
 
 #include "FPSTimer.h"
+#include "OVRkill.h"
 
 class ParamListGL;
 
@@ -33,7 +34,7 @@ public:
     AntOculusAppSkeleton();
     virtual ~AntOculusAppSkeleton();
 
-    virtual void display(bool useOculus=false);
+    virtual void display(bool useOculus=false, OVRkill::DisplayMode mode=OVRkill::SingleEye);
     virtual void mouseDown(int button, int state, int x, int y);
     virtual void mouseMove(int x, int y);
     virtual void mouseWheel(int x, int y);

@@ -27,7 +27,7 @@
 
 #include "AppSkeleton.h"
 #include "Scene.h"
-#include "OVRkill/OVRkill.h"
+#include "OVRkill.h"
 #include "Timer.h"
 
 ///@brief Encapsulates as much of the VR viewer state as possible,
@@ -39,7 +39,7 @@ public:
     OculusAppSkeleton();
     virtual ~OculusAppSkeleton();
 
-    virtual void display(bool useOculus=false) const;
+    virtual void display(bool useOculus=false, OVRkill::DisplayMode mode=OVRkill::SingleEye) const;
     virtual void mouseDown(int button, int state, int x, int y);
     virtual void mouseMove(int x, int y);
     virtual void mouseWheel(int x, int y);
@@ -67,7 +67,7 @@ protected:
     void AssembleViewMatrix();
 
     void DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const;
-    void DrawScene(bool stereo) const;
+    void DrawScene(bool stereo, OVRkill::DisplayMode mode=OVRkill::SingleEye) const;
 
     /// VR view parameters
     const OVR::Vector3f UpVector;

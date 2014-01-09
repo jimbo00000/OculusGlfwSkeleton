@@ -493,7 +493,7 @@ void OculusAppSkeleton::DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR:
     }
 }
 
-void OculusAppSkeleton::DrawScene(bool stereo) const
+void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -556,7 +556,7 @@ void OculusAppSkeleton::DrawScene(bool stereo) const
 }
 
 /// Set up view matrices, then draw scene
-void OculusAppSkeleton::display(bool useOculus) const
+void OculusAppSkeleton::display(bool useOculus, OVRkill::DisplayMode mode) const
 {
     /// This may save us some frame rate
     if (!useOculus && !m_displaySceneInControl)
@@ -570,13 +570,18 @@ void OculusAppSkeleton::display(bool useOculus) const
 
     m_ok.BindRenderBuffer();
     {
-        DrawScene(useOculus);
+        DrawScene(useOculus, mode);
     }
     m_ok.UnBindRenderBuffer();
 
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-    const OVRkill::PostProcessType post = useOculus ? OVRkill::PostProcess_Distortion : OVRkill::PostProcess_None;
+    OVRkill::PostProcessType post = OVRkill::PostProcess_None;
+    if ((useOculus) && (mode == OVRkill::StereoWithDistortion))
+    {
+        post = OVRkill::PostProcess_Distortion;
+    }
+
     m_ok.PresentFbo(post, m_riftDist);
 }
