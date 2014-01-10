@@ -50,8 +50,11 @@ public:
     virtual bool initGL(int argc, char **argv);
     virtual void timestep(float dt);
 
+    void SetBufferScaleUp(float s) { m_bufferScaleUp = s; }
+
     int GetOculusWidth() const { return m_ok.GetOculusWidth(); }
     int GetOculusHeight() const { return m_ok.GetOculusHeight(); }
+    float GetBufferScaleUp() const { return m_bufferScaleUp; }
     void ResizeFbo();
 
     OVR::Matrix4f GetRollPitchYaw() const {
