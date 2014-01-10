@@ -225,22 +225,30 @@ void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
 
 
 /// Draw the scene(matrices have already been set up).
-void Scene::DrawScene(const OVR::Matrix4f& mview) const
-{
-    //_DrawSceneWireFrame(mview);
-    _DrawScenePlanes(mview);
-    _DrawBouncingCubes(mview);
-}
-
-
-void Scene::RenderForOneEye(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
+void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
 {
     glUseProgram(m_progBasic);
     {
         glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
         glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
 
-        DrawScene(mview);
+        //_DrawSceneWireFrame(mview);
+        _DrawScenePlanes(mview);
     }
     glUseProgram(0);
+
+    glUseProgram(m_progBasic);
+    {
+        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
+
+        _DrawBouncingCubes(mview);
+    }
+    glUseProgram(0);
+}
+
+
+void Scene::RenderForOneEye(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
+{
+    DrawScene(mview, persp);
 }

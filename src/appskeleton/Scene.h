@@ -27,7 +27,7 @@ protected:
     void DrawColorCube() const;
     void DrawGrid() const;
     void DrawOrigin() const;
-    void DrawScene(const OVR::Matrix4f& mview) const;
+    void DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const;
 
 protected:
     void _DrawBouncingCubes(const OVR::Matrix4f& mview) const;
