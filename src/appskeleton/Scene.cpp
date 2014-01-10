@@ -148,19 +148,9 @@ void Scene::DrawOrigin() const
                    &lines[0]);
 }
 
-
-/// Draw the scene(matrices have already been set up).
-void Scene::DrawScene(const OVR::Matrix4f& mview) const
+/// Draw a circle of color cubes(why not)
+void Scene::_DrawBouncingCubes(const OVR::Matrix4f& mview) const
 {
-    DrawGrid();
-
-    /// Draw a ceiling
-    const float ceilHeight = 3.0f;
-    OVR::Matrix4f ceiltx = mview * OVR::Matrix4f::Translation(0.0f, ceilHeight, 0.0f);
-    glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &ceiltx.Transposed().M[0][0]);
-    DrawGrid();
-
-    /// Draw a circle of color cubes(why not)
     const int numCubes = 12;
     for (int i=0; i<numCubes; ++i)
     {
@@ -179,6 +169,31 @@ void Scene::DrawScene(const OVR::Matrix4f& mview) const
 
         DrawColorCube();
     }
+}
+
+/// Draw a floor and ceiling using GL_LINES.
+/// You will find the the LINES and POINTS primitive do not work in VR - they break depth
+/// cues with their different rasterization behavior from TRIANGLES.
+void Scene::_DrawSceneWireFrame(const OVR::Matrix4f& mview) const
+{
+    DrawGrid();
+
+    const float ceilHeight = 3.0f;
+    OVR::Matrix4f ceiltx = mview * OVR::Matrix4f::Translation(0.0f, ceilHeight, 0.0f);
+    glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &ceiltx.Transposed().M[0][0]);
+    DrawGrid();
+}
+
+//void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
+//{
+//}
+
+
+/// Draw the scene(matrices have already been set up).
+void Scene::DrawScene(const OVR::Matrix4f& mview) const
+{
+    _DrawSceneWireFrame(mview);
+    _DrawBouncingCubes(mview);
 }
 
 
