@@ -67,7 +67,7 @@ ELSEIF( UNIX )
     SET( PLATFORM_LIBS
         -lovr
         -lGLEW
-        -lGLU -lglfw3
+        -lGLU -lglfw
         -pthread
         -ludev
         -lrt
