@@ -28,6 +28,7 @@
 
 Scene::Scene()
 : m_progBasic(0)
+, m_progPlane(0)
 , m_phaseVal(0.0f)
 , m_cubeScale(1.0f)
 , m_amplitude(1.0f)
@@ -37,11 +38,13 @@ Scene::Scene()
 Scene::~Scene()
 {
     glDeleteProgram(m_progBasic);
+    glDeleteProgram(m_progPlane);
 }
 
 void Scene::initGL()
 {
     m_progBasic = makeShaderByName("basic");
+    m_progPlane = makeShaderByName("basicplane");
 }
 
 /// Draw an RGB color cube
@@ -194,13 +197,19 @@ void DrawPlane()
         maxPt.x, minPt.y, maxPt.z,
         maxPt.x, minPt.y, minPt.z,
     };
+    const float2 texs[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+    };
     const uint3 quads[] = {
         {0,3,2}, {1,0,2}, // ccw
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, verts);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, verts);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, texs);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
@@ -227,12 +236,11 @@ void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
 /// Draw the scene(matrices have already been set up).
 void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
 {
-    glUseProgram(m_progBasic);
+    glUseProgram(m_progPlane);
     {
-        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
-        glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(m_progPlane, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(m_progPlane, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
 
-        //_DrawSceneWireFrame(mview);
         _DrawScenePlanes(mview);
     }
     glUseProgram(0);
@@ -242,6 +250,7 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
         glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
         glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
 
+        //_DrawSceneWireFrame(mview);
         _DrawBouncingCubes(mview);
     }
     glUseProgram(0);

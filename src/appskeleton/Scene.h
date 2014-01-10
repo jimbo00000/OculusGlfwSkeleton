@@ -35,6 +35,7 @@ protected:
     void _DrawScenePlanes(const OVR::Matrix4f& mview) const;
 
     GLuint m_progBasic;
+    GLuint m_progPlane;
 
 public:
     /// Scene animation state
