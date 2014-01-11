@@ -102,27 +102,11 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarCB(m_pBar, "MPixels/sec", TW_TYPE_FLOAT, NULL, GetMegaPxPerSecond, this,
         "precision=0 group='Performance' ");
 
-
     TwAddVarCB(m_pBar, "FBO ScaleUp", TW_TYPE_FLOAT,
         SetBufferScaleCallback, GetBufferScaleCallback, this,
         " label='FBO ScaleUp' min=0.25 max=16.0 step=0.01 group=Performance ");
 
 
-
-    TwAddVarRW(m_pBar, "cube scale", TW_TYPE_FLOAT, &m_scene.m_cubeScale, 
-               " label='cube scale' min=1 max=20 step=1.0 keyIncr=a keyDecr=A help='cube scale' ");
-    TwAddVarRW(m_pBar, "amplitude", TW_TYPE_FLOAT, &m_scene.m_amplitude, 
-               " label='amplitude' min=0 max=2 step=0.01 keyIncr=z keyDecr=Z help='amplitude' ");
-
-    TwAddVarRW(m_pBar, "followcam.x", TW_TYPE_FLOAT, &FollowCamDisplacement.x,
-               " label='followcam.x' min=-30 max=30 step=0.01 help='followcam.x' group=camera ");
-    TwAddVarRW(m_pBar, "followcam.y", TW_TYPE_FLOAT, &FollowCamDisplacement.y,
-               " label='followcam.y' min=-30 max=30 step=0.01 help='followcam.y' group=camera ");
-    TwAddVarRW(m_pBar, "followcam.z", TW_TYPE_FLOAT, &FollowCamDisplacement.z,
-               " label='followcam.z' min=-30 max=30 step=0.01 help='followcam.z' group=camera ");
-
-    TwAddVarRW(m_pBar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
-               " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
 
     //
     // HMD params passed to OVR Post Process Distortion shader
@@ -150,6 +134,35 @@ void AntOculusAppSkeleton::_InitializeBar()
 
     TwAddButton(m_pBar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
         " label='ResetDistortionParams' group='HMD' ");
+
+
+
+    //
+    // Camera params
+    //
+    TwAddVarRW(m_pBar, "followcam.x", TW_TYPE_FLOAT, &FollowCamDisplacement.x,
+               " label='followcam.x' min=-30 max=30 step=0.01 group=Camera ");
+    TwAddVarRW(m_pBar, "followcam.y", TW_TYPE_FLOAT, &FollowCamDisplacement.y,
+               " label='followcam.y' min=-30 max=30 step=0.01 group=Camera ");
+    TwAddVarRW(m_pBar, "followcam.z", TW_TYPE_FLOAT, &FollowCamDisplacement.z,
+               " label='followcam.z' min=-30 max=30 step=0.01 group=Camera ");
+
+    TwAddVarRW(m_pBar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
+               " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=Camera ");
+
+
+
+    //
+    // Scene parameters
+    //
+    TwAddVarRW(m_pBar, "cube scale", TW_TYPE_FLOAT, &m_scene.m_cubeScale, 
+               " label='cube scale' min=1 max=20 step=1.0 group=Scene ");
+    TwAddVarRW(m_pBar, "amplitude", TW_TYPE_FLOAT, &m_scene.m_amplitude, 
+               " label='amplitude' min=0 max=2 step=0.01 group=Scene ");
+    
+    int opened = 0;
+    TwSetParam(m_pBar, "Scene", "opened", TW_PARAM_INT32, 1, &opened);
+    TwSetParam(m_pBar, "Camera", "opened", TW_PARAM_INT32, 1, &opened);
 
 }
 #endif
