@@ -475,6 +475,7 @@ void OculusAppSkeleton::DrawFrustumAvatar(const OVR::Matrix4f& mview, const OVR:
 
 void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
 {
+    glClearColor(0.3f, 0.4f, 0.5f, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     const int fboWidth = m_ok.GetRenderBufferWidth();
@@ -541,7 +542,7 @@ void OculusAppSkeleton::display(bool isControl, OVRkill::DisplayMode mode) const
     /// This may save us some frame rate
     if (isControl && !m_displaySceneInControl)
     {
-        glClearColor(0,0,0,0);
+        glClearColor(0.3f, 0.4f, 0.5f, 0);
         glClear(GL_COLOR_BUFFER_BIT);
         return;
     }
