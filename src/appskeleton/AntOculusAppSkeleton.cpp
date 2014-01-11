@@ -114,6 +114,10 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarRW(m_bar, "ScaleInY", TW_TYPE_FLOAT, &m_riftDist.ScaleInY,
                " label='ScaleInY' min=0 max=10.0 step=0.1 group=HMD ");
 
+    TwAddVarRW(m_bar, "DistScale", TW_TYPE_FLOAT, &m_riftDist.DistScale,
+               " label='DistScale' min=0 max=3.0 step=0.01 group=HMD ");
+
+
     TwAddButton(m_bar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
         " label='ResetDistortionParams' group='HMD' ");
 

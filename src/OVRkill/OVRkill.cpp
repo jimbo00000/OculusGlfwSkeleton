@@ -198,10 +198,10 @@ void OVRkill::PresentFbo_PostProcessDistortion(
             distParams.ScaleInX, distParams.ScaleInY);
 
         glUniform4f(getUniLoc(m_progRiftDistortion, "HmdWarpParam"),
-            pDistortion->K[0],
-            pDistortion->K[1],
-            pDistortion->K[2],
-            pDistortion->K[3]
+            distParams.DistScale * pDistortion->K[0],
+            distParams.DistScale * pDistortion->K[1],
+            distParams.DistScale * pDistortion->K[2],
+            distParams.DistScale * pDistortion->K[3]
         );
 
         glActiveTexture(GL_TEXTURE0);
