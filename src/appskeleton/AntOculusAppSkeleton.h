@@ -44,6 +44,7 @@ public:
     virtual bool initGL(int argc, char **argv);
     virtual void frameStart() { m_timer.OnFrame(); m_fps = m_timer.GetFPS(); }
 
+    float GetMegaPixelsPerSecond() const { return (float)GetPixelCount() * m_fps / (float)(1024*1024); }
 protected:
     FPSTimer  m_timer;
     float     m_fps;

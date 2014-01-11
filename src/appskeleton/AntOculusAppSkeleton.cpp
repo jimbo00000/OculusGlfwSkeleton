@@ -69,6 +69,10 @@ static void TW_CALL GetPxCount(void *value, void *clientData)
     *static_cast<int *>(value) = static_cast<const AntOculusAppSkeleton *>(clientData)->GetPixelCount();
 }
 
+static void TW_CALL GetMegaPxPerSecond(void *value, void *clientData)
+{
+    *static_cast<float *>(value) = static_cast<const AntOculusAppSkeleton *>(clientData)->GetMegaPixelsPerSecond();
+}
 
 
 void AntOculusAppSkeleton::_InitializeBar()
@@ -94,6 +98,8 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarCB(m_pBar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
         "precision=0 group='Performance' ");
     TwAddVarCB(m_pBar, "Pixel Count", TW_TYPE_INT32, NULL, GetPxCount, this,
+        "precision=0 group='Performance' ");
+    TwAddVarCB(m_pBar, "MPixels/sec", TW_TYPE_FLOAT, NULL, GetMegaPxPerSecond, this,
         "precision=0 group='Performance' ");
 
 
