@@ -6,7 +6,7 @@ AntOculusAppSkeleton::AntOculusAppSkeleton()
 : m_timer()
 , m_fps(0.0f)
 #ifdef USE_ANTTWEAKBAR
-, m_bar(NULL)
+, m_pBar(NULL)
 #endif
 {
 }
@@ -14,7 +14,7 @@ AntOculusAppSkeleton::AntOculusAppSkeleton()
 AntOculusAppSkeleton::~AntOculusAppSkeleton()
 {
     ///@todo Delete this before glfw
-    //delete m_bar;
+    //delete m_pBar;
 }
 
 #ifdef USE_ANTTWEAKBAR
@@ -71,64 +71,64 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwWindowSize(m_windowWidth, m_windowHeight);
 
     // Create a tweak bar
-    m_bar = TwNewBar("TweakBar");
+    m_pBar = TwNewBar("TweakBar");
     TwDefine(" TweakBar refresh=0.1 ");
     TwDefine(" TweakBar fontsize=3 ");
     TwDefine(" TweakBar size='240 500' ");
 
-    TwAddVarRO(m_bar, "fps", TW_TYPE_FLOAT, &m_fps, 
+    TwAddVarRO(m_pBar, "fps", TW_TYPE_FLOAT, &m_fps, 
                " label='fps' help='Frames per second' precision=0 ");
 
-    TwAddVarRW(m_bar, "cube scale", TW_TYPE_FLOAT, &m_scene.m_cubeScale, 
+    TwAddVarRW(m_pBar, "cube scale", TW_TYPE_FLOAT, &m_scene.m_cubeScale, 
                " label='cube scale' min=1 max=20 step=1.0 keyIncr=a keyDecr=A help='cube scale' ");
-    TwAddVarRW(m_bar, "amplitude", TW_TYPE_FLOAT, &m_scene.m_amplitude, 
+    TwAddVarRW(m_pBar, "amplitude", TW_TYPE_FLOAT, &m_scene.m_amplitude, 
                " label='amplitude' min=0 max=2 step=0.01 keyIncr=z keyDecr=Z help='amplitude' ");
 
-    TwAddVarRW(m_bar, "followcam.x", TW_TYPE_FLOAT, &FollowCamDisplacement.x,
+    TwAddVarRW(m_pBar, "followcam.x", TW_TYPE_FLOAT, &FollowCamDisplacement.x,
                " label='followcam.x' min=-30 max=30 step=0.01 help='followcam.x' group=camera ");
-    TwAddVarRW(m_bar, "followcam.y", TW_TYPE_FLOAT, &FollowCamDisplacement.y,
+    TwAddVarRW(m_pBar, "followcam.y", TW_TYPE_FLOAT, &FollowCamDisplacement.y,
                " label='followcam.y' min=-30 max=30 step=0.01 help='followcam.y' group=camera ");
-    TwAddVarRW(m_bar, "followcam.z", TW_TYPE_FLOAT, &FollowCamDisplacement.z,
+    TwAddVarRW(m_pBar, "followcam.z", TW_TYPE_FLOAT, &FollowCamDisplacement.z,
                " label='followcam.z' min=-30 max=30 step=0.01 help='followcam.z' group=camera ");
 
-    TwAddVarRW(m_bar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
+    TwAddVarRW(m_pBar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
 
     // HMD params passed to OVR Post Process Distortion shader
-    TwAddVarRW(m_bar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
+    TwAddVarRW(m_pBar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
                " label='lensOff'     min=0 max=0.1 step=0.001 group=HMD ");
-    TwAddVarRW(m_bar, "LensCenterX", TW_TYPE_FLOAT, &m_riftDist.LensCenterX,
+    TwAddVarRW(m_pBar, "LensCenterX", TW_TYPE_FLOAT, &m_riftDist.LensCenterX,
                " label='LensCenterX' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "LensCenterY", TW_TYPE_FLOAT, &m_riftDist.LensCenterY,
+    TwAddVarRW(m_pBar, "LensCenterY", TW_TYPE_FLOAT, &m_riftDist.LensCenterY,
                " label='LensCenterY' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScreenCenterX", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterX,
+    TwAddVarRW(m_pBar, "ScreenCenterX", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterX,
                " label='ScreenCenterX' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScreenCenterY", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterY,
+    TwAddVarRW(m_pBar, "ScreenCenterY", TW_TYPE_FLOAT, &m_riftDist.ScreenCenterY,
                " label='ScreenCenterY' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScaleX", TW_TYPE_FLOAT, &m_riftDist.ScaleX,
+    TwAddVarRW(m_pBar, "ScaleX", TW_TYPE_FLOAT, &m_riftDist.ScaleX,
                " label='ScaleX' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScaleY", TW_TYPE_FLOAT, &m_riftDist.ScaleY,
+    TwAddVarRW(m_pBar, "ScaleY", TW_TYPE_FLOAT, &m_riftDist.ScaleY,
                " label='ScaleY' min=0 max=1.0 step=0.01 group=HMD ");
-    TwAddVarRW(m_bar, "ScaleInX", TW_TYPE_FLOAT, &m_riftDist.ScaleInX,
+    TwAddVarRW(m_pBar, "ScaleInX", TW_TYPE_FLOAT, &m_riftDist.ScaleInX,
                " label='ScaleInX' min=0 max=10.0 step=0.1 group=HMD ");
-    TwAddVarRW(m_bar, "ScaleInY", TW_TYPE_FLOAT, &m_riftDist.ScaleInY,
+    TwAddVarRW(m_pBar, "ScaleInY", TW_TYPE_FLOAT, &m_riftDist.ScaleInY,
                " label='ScaleInY' min=0 max=10.0 step=0.1 group=HMD ");
 
-    TwAddVarRW(m_bar, "DistScale", TW_TYPE_FLOAT, &m_riftDist.DistScale,
+    TwAddVarRW(m_pBar, "DistScale", TW_TYPE_FLOAT, &m_riftDist.DistScale,
                " label='DistScale' min=0 max=3.0 step=0.01 group=HMD ");
 
 
-    TwAddButton(m_bar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
+    TwAddButton(m_pBar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
         " label='ResetDistortionParams' group='HMD' ");
 
-    TwAddSeparator(m_bar, NULL, " group='HMD' ");
+    TwAddSeparator(m_pBar, NULL, " group='HMD' ");
 
-    TwAddVarCB(m_bar, "FBO width", TW_TYPE_INT32, NULL, GetDistortionFboWidth, &m_ok,
+    TwAddVarCB(m_pBar, "FBO width", TW_TYPE_INT32, NULL, GetDistortionFboWidth, &m_ok,
         "precision=0 group='HMD' ");
-    TwAddVarCB(m_bar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
+    TwAddVarCB(m_pBar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
         "precision=0 group='HMD' ");
 
-    TwAddVarCB(m_bar, "FBO ScaleUp", TW_TYPE_FLOAT,
+    TwAddVarCB(m_pBar, "FBO ScaleUp", TW_TYPE_FLOAT,
         SetBufferScaleCallback, GetBufferScaleCallback, this,
         " label='FBO ScaleUp' min=0.25 max=4.0 step=0.01 group=HMD ");
 }
@@ -152,7 +152,7 @@ void AntOculusAppSkeleton::display(bool isControl, OVRkill::DisplayMode mode)
     // on a mirrored 1920x1080. It can also be minimized.
     if (isControl)
     {
-        TwRefreshBar(m_bar);
+        TwRefreshBar(m_pBar);
         TwDraw(); ///@todo Should this go first? Will it write to a depth buffer?
     }
 #endif

@@ -50,7 +50,7 @@ protected:
 
 #ifdef USE_ANTTWEAKBAR
     void _InitializeBar();
-    TwBar* m_bar;
+    TwBar* m_pBar;
     double speed;
 #endif
 
