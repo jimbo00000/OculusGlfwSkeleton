@@ -64,6 +64,12 @@ static void TW_CALL GetBufferScaleCallback(void *value, void *clientData)
     }
 }
 
+static void TW_CALL GetPxCount(void *value, void *clientData)
+{
+    *static_cast<int *>(value) = static_cast<const AntOculusAppSkeleton *>(clientData)->GetPixelCount();
+}
+
+
 
 void AntOculusAppSkeleton::_InitializeBar()
 {
@@ -76,8 +82,26 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwDefine(" TweakBar fontsize=3 ");
     TwDefine(" TweakBar size='240 500' ");
 
+
+    //
+    // Performance Group
+    //
     TwAddVarRO(m_pBar, "fps", TW_TYPE_FLOAT, &m_fps, 
-               " label='fps' help='Frames per second' precision=0 ");
+               " label='fps' precision=0 group='Performance' ");
+
+    TwAddVarCB(m_pBar, "FBO width", TW_TYPE_INT32, NULL, GetDistortionFboWidth, &m_ok,
+        "precision=0 group='Performance' ");
+    TwAddVarCB(m_pBar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
+        "precision=0 group='Performance' ");
+    TwAddVarCB(m_pBar, "Pixel Count", TW_TYPE_INT32, NULL, GetPxCount, this,
+        "precision=0 group='Performance' ");
+
+
+    TwAddVarCB(m_pBar, "FBO ScaleUp", TW_TYPE_FLOAT,
+        SetBufferScaleCallback, GetBufferScaleCallback, this,
+        " label='FBO ScaleUp' min=0.25 max=16.0 step=0.01 group=Performance ");
+
+
 
     TwAddVarRW(m_pBar, "cube scale", TW_TYPE_FLOAT, &m_scene.m_cubeScale, 
                " label='cube scale' min=1 max=20 step=1.0 keyIncr=a keyDecr=A help='cube scale' ");
@@ -94,7 +118,9 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddVarRW(m_pBar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=camera ");
 
+    //
     // HMD params passed to OVR Post Process Distortion shader
+    //
     TwAddVarRW(m_pBar, "lensOff", TW_TYPE_FLOAT, &m_riftDist.lensOff,
                " label='lensOff'     min=0 max=0.1 step=0.001 group=HMD ");
     TwAddVarRW(m_pBar, "LensCenterX", TW_TYPE_FLOAT, &m_riftDist.LensCenterX,
@@ -113,24 +139,12 @@ void AntOculusAppSkeleton::_InitializeBar()
                " label='ScaleInX' min=0 max=10.0 step=0.1 group=HMD ");
     TwAddVarRW(m_pBar, "ScaleInY", TW_TYPE_FLOAT, &m_riftDist.ScaleInY,
                " label='ScaleInY' min=0 max=10.0 step=0.1 group=HMD ");
-
     TwAddVarRW(m_pBar, "DistScale", TW_TYPE_FLOAT, &m_riftDist.DistScale,
                " label='DistScale' min=0 max=3.0 step=0.01 group=HMD ");
-
 
     TwAddButton(m_pBar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
         " label='ResetDistortionParams' group='HMD' ");
 
-    TwAddSeparator(m_pBar, NULL, " group='HMD' ");
-
-    TwAddVarCB(m_pBar, "FBO width", TW_TYPE_INT32, NULL, GetDistortionFboWidth, &m_ok,
-        "precision=0 group='HMD' ");
-    TwAddVarCB(m_pBar, "FBO height", TW_TYPE_INT32, NULL, GetDistortionFboHeight, &m_ok,
-        "precision=0 group='HMD' ");
-
-    TwAddVarCB(m_pBar, "FBO ScaleUp", TW_TYPE_FLOAT,
-        SetBufferScaleCallback, GetBufferScaleCallback, this,
-        " label='FBO ScaleUp' min=0.25 max=4.0 step=0.01 group=HMD ");
 }
 #endif
 

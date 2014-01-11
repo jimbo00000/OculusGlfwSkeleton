@@ -56,6 +56,7 @@ public:
     int GetOculusHeight() const { return m_ok.GetOculusHeight(); }
     float GetBufferScaleUp() const { return m_bufferScaleUp; }
     void ResizeFbo();
+    int GetPixelCount() const { return m_ok.GetOculusWidth() * m_ok.GetOculusHeight() * m_bufferScaleUp * m_bufferScaleUp; }
 
     OVR::Matrix4f GetRollPitchYaw() const {
         return OVR::Matrix4f::RotationY(EyeYaw) *
