@@ -74,6 +74,11 @@ static void TW_CALL GetMegaPxPerSecond(void *value, void *clientData)
     *static_cast<float *>(value) = static_cast<const AntOculusAppSkeleton *>(clientData)->GetMegaPixelsPerSecond();
 }
 
+static void TW_CALL ResetEyePositionCB(void *clientData)
+{
+    static_cast<AntOculusAppSkeleton *>(clientData)->ResetEyePosition();
+}
+
 
 void AntOculusAppSkeleton::_InitializeBar()
 {
@@ -159,7 +164,10 @@ void AntOculusAppSkeleton::_InitializeBar()
                " label='cube scale' min=1 max=20 step=1.0 group=Scene ");
     TwAddVarRW(m_pBar, "amplitude", TW_TYPE_FLOAT, &m_scene.m_amplitude, 
                " label='amplitude' min=0 max=2 step=0.01 group=Scene ");
-    
+
+    TwAddButton(m_pBar, "Reset Eye Position", ResetEyePositionCB, this,
+               " label='Reset Eye Position' group='Scene' ");
+
     int opened = 0;
     TwSetParam(m_pBar, "Scene", "opened", TW_PARAM_INT32, 1, &opened);
     TwSetParam(m_pBar, "Camera", "opened", TW_PARAM_INT32, 1, &opened);

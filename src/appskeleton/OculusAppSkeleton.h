@@ -51,6 +51,13 @@ public:
     virtual void timestep(float dt);
 
     void SetBufferScaleUp(float s) { m_bufferScaleUp = s; }
+    void ResetEyePosition()
+    {
+        EyePos = OVR::Vector3f(0.0f, m_standingHeight, -5.0f);
+        EyeYaw = YawInitial;
+        EyePitch = 0;
+        EyeRoll = 0;
+    }
 
     int GetOculusWidth() const { return m_ok.GetOculusWidth(); }
     int GetOculusHeight() const { return m_ok.GetOculusHeight(); }
