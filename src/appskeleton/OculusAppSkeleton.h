@@ -119,6 +119,7 @@ protected:
     OVRkill m_ok;
     RiftDistortionParams  m_riftDist;
     float m_bufferScaleUp;
+    int   m_bufferGutterPx;
 
     Scene   m_scene;
 

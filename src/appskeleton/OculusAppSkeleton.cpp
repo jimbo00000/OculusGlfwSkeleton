@@ -41,6 +41,7 @@ OculusAppSkeleton::OculusAppSkeleton()
 , m_ok()
 , m_riftDist()
 , m_bufferScaleUp(1.0f)
+, m_bufferGutterPx(0)
 , m_scene()
 , m_avatarProg(0)
 , m_displaySceneInControl(true)
@@ -518,13 +519,23 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
         OVR::Matrix4f viewLeft = OVR::Matrix4f::Translation(halfIPD, 0, 0) * m_oculusView;
         OVR::Matrix4f viewRight= OVR::Matrix4f::Translation(-halfIPD, 0, 0) * m_oculusView;
 
-        glViewport(0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-        glScissor (0        ,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-        m_scene.RenderForOneEye(viewLeft, projLeft);
+        ///@note Scissoring out the fragments near the periphery of the FOV should (hopefully)
+        /// result in higher performance by having to draw fewer pixels.
+        /// This is contingent on the driver's implementation performing the scissor test
+        /// *before* execution of the fragment shader.
+        glEnable(GL_SCISSOR_TEST);
+        {
+            const GLsizei g = m_bufferGutterPx;
 
-        glViewport(halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-        glScissor (halfWidth,0,(GLsizei)halfWidth, (GLsizei)fboHeight);
-        m_scene.RenderForOneEye(viewRight, projRight);
+            glViewport(0          , 0, (GLsizei)halfWidth     , (GLsizei)fboHeight     );
+            glScissor (g          , g, (GLsizei)halfWidth -2*g, (GLsizei)fboHeight -2*g);
+            m_scene.RenderForOneEye(viewLeft, projLeft);
+
+            glViewport(halfWidth  , 0, (GLsizei)halfWidth     , (GLsizei)fboHeight     );
+            glScissor (halfWidth+g, g, (GLsizei)halfWidth -2*g, (GLsizei)fboHeight -2*g);
+            m_scene.RenderForOneEye(viewRight, projRight);
+        }
+        glDisable(GL_SCISSOR_TEST);
     }
     else
     {

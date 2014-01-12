@@ -111,6 +111,9 @@ void AntOculusAppSkeleton::_InitializeBar()
         SetBufferScaleCallback, GetBufferScaleCallback, this,
         " label='FBO ScaleUp' min=0.25 max=16.0 step=0.01 group=Performance ");
 
+    TwAddVarRW(m_pBar, "FBO gutter size", TW_TYPE_INT32, &m_bufferGutterPx,
+        " min=0 precision=0 group='Performance' ");
+
 
 
     //
