@@ -240,6 +240,14 @@ void OculusAppSkeleton::HandleKeyboardMovement()
     {
         KeyboardMove += OVR::Vector3f(1.0f, 0.0f, 0.0f);
     }
+    if (m_keyStates['Q'] != GLFW_RELEASE)
+    {
+        KeyboardMove += OVR::Vector3f(0.0f, -1.0f, 0.0f);
+    }
+    if (m_keyStates['E'] != GLFW_RELEASE)
+    {
+        KeyboardMove += OVR::Vector3f(0.0f, 1.0f, 0.0f);
+    }
 }
 
 
