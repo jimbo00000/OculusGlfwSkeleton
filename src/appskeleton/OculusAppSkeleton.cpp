@@ -65,6 +65,18 @@ bool OculusAppSkeleton::initVR(bool fullScreen)
     return true;
 }
 
+/// Take into account the FBO gutters which cull edge pixels on each half of the FBO
+/// using glScissor. See DrawScene.
+int OculusAppSkeleton::GetPixelCount() const
+{
+    const int fboWidth = m_ok.GetRenderBufferWidth();
+    const int fboHeight = m_ok.GetRenderBufferHeight();
+    const int halfWidth = fboWidth/2;
+    const int widthGutter  = halfWidth - 2*m_bufferGutterPx;
+    const int heightGutter = fboHeight - 2*m_bufferGutterPx;
+    return 2 * widthGutter * heightGutter;
+}
+
 void OculusAppSkeleton::ResizeFbo()
 {
     m_ok.CreateRenderBuffer(m_bufferScaleUp);
