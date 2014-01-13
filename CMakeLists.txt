@@ -66,7 +66,7 @@ ELSEIF( UNIX )
 
     SET( PLATFORM_LIBS
         -lovr
-        -lGLEW
+        -lGL -lGLEW
         -lGLU -lglfw
         -pthread
         -ludev
@@ -75,6 +75,7 @@ ELSEIF( UNIX )
         -lXrandr
         -lXxf86vm
         -lXi
+        -lX11
         ${ANT_LIBS}
         )
 ENDIF()
