@@ -42,6 +42,7 @@ OculusAppSkeleton::OculusAppSkeleton()
 , m_riftDist()
 , m_bufferScaleUp(1.0f)
 , m_bufferGutterPx(0)
+, m_flattenStereo(false)
 , m_scene()
 , m_avatarProg(0)
 , m_displaySceneInControl(true)
@@ -526,9 +527,11 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
         OVR::Matrix4f projCenter = OVR::Matrix4f::PerspectiveRH(yfov, aspectRatio, 0.3f, 1000.0f);
         OVR::Matrix4f projLeft   = OVR::Matrix4f::Translation(projectionCenterOffset, 0, 0) * projCenter;
         OVR::Matrix4f projRight  = OVR::Matrix4f::Translation(-projectionCenterOffset, 0, 0) * projCenter;
-        
+
         // m_oculusView transformation translation in world units.
         float halfIPD = hmd.InterpupillaryDistance * 0.5f;
+        if (m_flattenStereo)
+            halfIPD = 0.0f;
         OVR::Matrix4f viewLeft = OVR::Matrix4f::Translation(halfIPD, 0, 0) * m_oculusView;
         OVR::Matrix4f viewRight= OVR::Matrix4f::Translation(-halfIPD, 0, 0) * m_oculusView;
 

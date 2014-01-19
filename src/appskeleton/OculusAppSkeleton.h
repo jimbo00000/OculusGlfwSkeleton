@@ -120,6 +120,7 @@ protected:
     RiftDistortionParams  m_riftDist;
     float m_bufferScaleUp;
     int   m_bufferGutterPx;
+    bool  m_flattenStereo;
 
     Scene   m_scene;
 
