@@ -58,6 +58,8 @@ public:
         EyePitch = 0;
         EyeRoll = 0;
     }
+    float GetEyeHeight() const { return EyePos.y; }
+    void SetEyeHeight(float h) { EyePos.y = h; }
 
     int GetOculusWidth() const { return m_ok.GetOculusWidth(); }
     int GetOculusHeight() const { return m_ok.GetOculusHeight(); }

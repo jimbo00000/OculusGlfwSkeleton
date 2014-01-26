@@ -80,6 +80,24 @@ static void TW_CALL ResetEyePositionCB(void *clientData)
 }
 
 
+static void TW_CALL SetEyeHeightCallback(const void *value, void *clientData)
+{
+    if (clientData)
+    {
+        static_cast<AntOculusAppSkeleton *>(clientData)->SetEyeHeight( *(float *)value);
+    }
+}
+
+static void TW_CALL GetEyeHeightCallback(void *value, void *clientData)
+{
+    if (clientData)
+    {
+        *(float *)value = static_cast<AntOculusAppSkeleton *>(clientData)->GetEyeHeight();
+    }
+}
+
+
+
 void AntOculusAppSkeleton::_InitializeBar()
 {
     ///@note Bad size errors will be thrown if this is not called at init
@@ -161,7 +179,6 @@ void AntOculusAppSkeleton::_InitializeBar()
                " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=Camera ");
 
 
-
     //
     // Scene parameters
     //
@@ -172,6 +189,10 @@ void AntOculusAppSkeleton::_InitializeBar()
 
     TwAddButton(m_pBar, "Reset Eye Position", ResetEyePositionCB, this,
                " label='Reset Eye Position' group='Scene' ");
+
+    TwAddVarCB(m_pBar, "Eye height", TW_TYPE_FLOAT,
+        SetEyeHeightCallback, GetEyeHeightCallback, this,
+        " label='Eye height' min=0.25 max=16.0 step=0.01 group=Scene ");
 
     int opened = 0;
     TwSetParam(m_pBar, "Scene", "opened", TW_PARAM_INT32, 1, &opened);
