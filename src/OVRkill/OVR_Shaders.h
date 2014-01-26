@@ -1,5 +1,6 @@
 // OVR_Shaders.h
 
+// From OculusSDK-0.2.2
 static const char* PostProcessVertexShaderSrc =
     "uniform mat4 View;\n"
     "uniform mat4 Texm;\n"
@@ -13,6 +14,7 @@ static const char* PostProcessVertexShaderSrc =
     "   oTexCoord.y = 1.0-oTexCoord.y;\n"
     "}\n";
 
+// From OculusSDK-0.2.2
 static const char* PostProcessFragShaderSrc =
     "uniform vec2 LensCenter;\n"
     "uniform vec2 ScreenCenter;\n"
@@ -40,6 +42,7 @@ static const char* PostProcessFragShaderSrc =
     "}\n";
 
 // Shader with lens distortion and chromatic aberration correction.
+// From OculusSDK-0.2.2
 static const char* PostProcessFullFragShaderSrc =
     "uniform vec2 LensCenter;\n"
     "uniform vec2 ScreenCenter;\n"
@@ -82,4 +85,23 @@ static const char* PostProcessFullFragShaderSrc =
     "   float red = texture2D(Texture0, tcRed).r;\n"
     "   \n"
     "   gl_FragColor = vec4(red, center.g, blue, 1);\n"
+    "}\n";
+
+static const char* PresentFboVertSrc =
+    "attribute vec2 vPosition;\n"
+    "attribute vec2 vTex;\n"
+    "varying vec2 vfTex;\n"
+    "uniform mat4 prmtx;\n"
+    "void main()\n"
+    "{\n"
+    "    vfTex = vTex;\n"
+    "    gl_Position = prmtx * vec4(vPosition, 0.0, 1.0);\n"
+    "}\n";
+
+static const char* PresentFboFragSrc =
+    "varying vec2 vfTex;\n"
+    "uniform sampler2D fboTex;\n"
+    "void main()\n"
+    "{\n"
+    "    gl_FragColor = texture2D(fboTex, vfTex);\n"
     "}\n";

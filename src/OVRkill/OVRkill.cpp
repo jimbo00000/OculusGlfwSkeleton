@@ -86,7 +86,7 @@ void OVRkill::DestroyOVR()
 /// We need an active GL context for this
 void OVRkill::CreateShaders()
 {
-    m_progPresFbo = makeShaderByName("presentFbo");
+    m_progPresFbo        = BuildShader(PresentFboVertSrc         , PresentFboFragSrc);
     m_progRiftDistortion = BuildShader(PostProcessVertexShaderSrc, PostProcessFragShaderSrc);
 }
 
