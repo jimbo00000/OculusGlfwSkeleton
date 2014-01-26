@@ -21,11 +21,11 @@ GLuint makeShaderFromSource(const char* source, const unsigned long Type)
     return shaderId;
 }
 
-/// Create a shader program from the OVR sources.
-GLuint CreateOVRShaders()
+/// Create a shader program from vertex and fragment shader sources.
+GLuint BuildShader(const char* pVertSrc, const char* pFragSrc)
 {
-    GLuint vertSrc = makeShaderFromSource(PostProcessVertexShaderSrc, GL_VERTEX_SHADER);
-    GLuint fragSrc = makeShaderFromSource(PostProcessFragShaderSrc, GL_FRAGMENT_SHADER);
+    GLuint vertSrc = makeShaderFromSource(pVertSrc, GL_VERTEX_SHADER);
+    GLuint fragSrc = makeShaderFromSource(pFragSrc, GL_FRAGMENT_SHADER);
 
     printShaderInfoLog(vertSrc);
     printShaderInfoLog(fragSrc);
@@ -87,9 +87,10 @@ void OVRkill::DestroyOVR()
 void OVRkill::CreateShaders()
 {
     m_progPresFbo = makeShaderByName("presentFbo");
-    m_progRiftDistortion = CreateOVRShaders();
+    m_progRiftDistortion = BuildShader(PostProcessVertexShaderSrc, PostProcessFragShaderSrc);
 }
 
+/// We need an active GL context for this
 void OVRkill::CreateRenderBuffer(float bufferScaleUp)
 {
     deallocateFBO(m_renderBuffer);
