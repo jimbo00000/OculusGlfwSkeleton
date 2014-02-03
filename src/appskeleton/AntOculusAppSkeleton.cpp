@@ -169,14 +169,14 @@ void AntOculusAppSkeleton::_InitializeBar()
     // Camera params
     //
     TwAddVarRW(m_pBar, "followcam.x", TW_TYPE_FLOAT, &FollowCamDisplacement.x,
-               " label='followcam.x' min=-30 max=30 step=0.01 group=Camera ");
+               " label='followcam.x' min=-30 max=30 step=0.01 group='Third Person Camera' ");
     TwAddVarRW(m_pBar, "followcam.y", TW_TYPE_FLOAT, &FollowCamDisplacement.y,
-               " label='followcam.y' min=-30 max=30 step=0.01 group=Camera ");
+               " label='followcam.y' min=-30 max=30 step=0.01 group='Third Person Camera' ");
     TwAddVarRW(m_pBar, "followcam.z", TW_TYPE_FLOAT, &FollowCamDisplacement.z,
-               " label='followcam.z' min=-30 max=30 step=0.01 group=Camera ");
+               " label='followcam.z' min=-30 max=30 step=0.01 group='Third Person Camera' ");
 
     TwAddVarRW(m_pBar, "viewAngle", TW_TYPE_FLOAT, &m_viewAngleDeg,
-               " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group=Camera ");
+               " label='viewAngle' min=30 max=90 step=0.1 help='viewAngle' group='Third Person Camera' ");
 
 
     //
