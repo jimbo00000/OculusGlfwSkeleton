@@ -2,31 +2,34 @@
 
 ## Description
 
-This app skeleton assuages some of the difficulties inherent in developing graphical apps for HMDs. Running a typical Rift app with cloned displays outputs barrel-distorted stereo pairs to the primary monitor, introduces latency, confounds debugging, and makes the Rift display that annoying blue square resolution message for five seconds on every mode change.
+A cross-platform multi-window app skeleton to use as a starting point for native VR app development with OpenGL. A convenient interface for tweaking common VR display parameters.
 
-This multi-window skeleton allows a programmer to run and debug using their normal workflow, displaying the same scene visible to the Rift user in an operator window from a third-person perspective. This operator window is resizable and includes an AntTweakBar for modifying variables on the fly. Scene display in the operator window can be toggled with the z key. Barrel-distorted post-processed video is displayed to the Rift throughout the duration of the app, allowing the developer to quickly glance into the VR space and verify correct display.
+
+
 
 
 ## Setup
 
+![Desktop layout](doc/NvidiaSettings-crop.png)
+
 ### Windows
 
-Set your display to "Extend" using WinKey + P. Position your Rift DK monitor immediately to the right of your primary display, with the top edges of the desktops aligned. The skeleton creates a non-fullscreen window to fill the desktop area of the extended display(using a fullscreen window on an extended display, Windows will automatically minimize that window on the first input event outside of that window).
+Use the **Screen Resolution** control panel to set your monitors' orientations to match the above image. **Winkey-P** is a quick shortcut to toggle Extended and Mirrored modes.
 
 ### Linux
 
-Use **nvidia-settings** or equivalent to set your Rift DK monitor to the right of your primary display, top-aligned(e.g. 1280x800 +1920+0).
+Use **nvidia-settings** or equivalent to set your monitors' orientations to match the above image(e.g. 1280x800 +1920+0).
 
-## Build
+## Build (skip if you've got an exe)
 
 ### Windows
 
     Create the directory build/ in project's home(alongside CMakeLists.txt)
     Shift+right-click it in Explorer->"Open command window here"
-    ...\build> cmake .. -G "Visual Studio 10"
+    build> cmake ..
     Double-click the only .sln file in build to open it in Visual Studio
     Right-click the GLSkeleton project in Solution Explorer, "Set as StartUp Project"
-    F7 to build, F5 to build and run
+    Press F7 to build, F5 to build and run
 
 ### Linux
 
@@ -36,10 +39,24 @@ Use **nvidia-settings** or equivalent to set your Rift DK monitor to the right o
     $> ./GLSkeleton
 
 
-### Thanks
+## Usage
 
-- elmindreda for the awesome Glfw3 framework which makes multi-window GL apps possible https://github.com/glfw/glfw
-- Palmer Luckey for the Oculus Rift
-- Philip Rideout for the excellent CMake/OpenGL code
-- Philippe Decaudin for AntTweakBar
-- Milan Ikits and Marcelo Magallon for GLEW
+Upon launching the app, a control view window is created. If a second display of resolution 1280x800 is detected, a second window will be created on it. The first window(Control window) will accept keyboard and mouse input and changes will automatically be reflected in the second(Rift window).
+
+- Left-click and drag to adjust viewing direction in the absence of a Rift with head tracker
+- Right-click and drag to move avatar location 
+- Mouse wheel to zoom Third Person Camera
+
+### Keys
+- z - Toggle display in control window
+- F1 - Cycle display mode of first window(normal, stereo, stereo with distortion)
+- F2 - Cycle display mode of second window if present
+
+
+## Thanks
+
+- elmindreda for the awesome [Glfw3 framework](https://github.com/glfw/glfw) which makes multi-window GL apps possible 
+- Palmer Luckey and Oculus for the [Oculus Rift and OVR SDK](http://www.oculusvr.com/)
+- Philip Rideout for the [excellent CMake/OpenGL code](http://github.prideout.net/)
+- Philippe Decaudin for [AntTweakBar](http://anttweakbar.sourceforge.net/doc/)
+- Milan Ikits and Marcelo Magallon for [GLEW](http://glew.sourceforge.net/)
