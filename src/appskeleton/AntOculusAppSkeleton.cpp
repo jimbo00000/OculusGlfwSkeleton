@@ -161,8 +161,8 @@ void AntOculusAppSkeleton::_InitializeBar()
     TwAddButton(m_pBar, "ResetDistortionParams", ResetDistortionParams, &m_riftDist,
         " label='ResetDistortionParams' group='HMD' ");
 
-    TwAddVarRW(m_pBar, "m_flattenStereo", TW_TYPE_BOOLCPP, &m_flattenStereo,
-               " label='m_flattenStereo' group=HMD ");
+    TwAddVarRW(m_pBar, "Flatten Stereo", TW_TYPE_BOOLCPP, &m_flattenStereo,
+               " label='Flatten Stereo' group=HMD ");
 
 
     //
