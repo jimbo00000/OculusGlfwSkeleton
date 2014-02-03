@@ -1,9 +1,11 @@
 // basicplane.vert
 
-attribute vec3 vPosition;
-attribute vec2 vTexCoord;
+#version 130
 
-varying vec2 vfTexCoord;
+in vec3 vPosition;
+in vec2 vTexCoord;
+
+out vec2 vfTexCoord;
 
 uniform mat4 mvmtx;
 uniform mat4 prmtx;
