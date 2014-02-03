@@ -1,7 +1,8 @@
 // vectortypes.h
+// These types are defined in the CUDA libraries, so use the
+// native ones instead if the project will use CUDA.
 
-#ifndef _VECTORTYPES_H_
-#define _VECTORTYPES_H_
+#pragma once
 
 /// A pair of ints
 struct int2 {
@@ -45,5 +46,3 @@ struct float3Idx {
     float3 pt;
     int idx;
 };
-
-#endif //_VECTORTYPES_H_

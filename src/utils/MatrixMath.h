@@ -1,7 +1,6 @@
 // MatrixMath.h
 
-#ifndef _MATRIXMATH_H_
-#define _MATRIXMATH_H_
+#pragma once
 
 #ifdef _WIN32
 #  define WINDOWS_LEAN_AND_MEAN
@@ -63,5 +62,3 @@ void glhOrtho(float *matrix,
               float top,
               float near,
               float far);
-
-#endif //_MATRIXMATH_H_
