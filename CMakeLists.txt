@@ -22,11 +22,12 @@ IF( WIN32 )
     INCLUDE_DIRECTORIES( "${GLEW_ROOT}/include" )
     LINK_DIRECTORIES   ( "${GLEW_ROOT}/lib" )
     #ADD_DEFINITIONS( -DGLEW_STATIC )
-    
+
     SET( OCULUSSDK_ROOT "${LIBS_HOME}/OculusSDK-0.2.2" )
     INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Include" )
     INCLUDE_DIRECTORIES( "${OCULUSSDK_ROOT}/LibOVR/Src" )
     LINK_DIRECTORIES   ( "${OCULUSSDK_ROOT}/LibOVR/Lib/Win32" )
+    SET( OVR_LIBS optimized libovr.lib debug libovrd.lib )
 
     IF( USE_ANTTWEAKBAR )
         SET( ANTTWEAKBAR_ROOT "${LIBS_HOME}/AntTweakBar_116/AntTweakBar" )
@@ -39,7 +40,7 @@ IF( WIN32 )
     SET( PLATFORM_LIBS
         glfw3.lib
         opengl32.lib glu32.lib glew32.lib 
-        libovrd.lib
+        ${OVR_LIBS}
         winmm.lib
         ${ANT_LIBS}
         )
