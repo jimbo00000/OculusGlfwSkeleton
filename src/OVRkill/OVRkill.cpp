@@ -56,7 +56,7 @@ OVRkill::OVRkill()
 : m_pManager(NULL)
 , m_pHMD(NULL)
 , m_pSensor(NULL)
-, m_SFusion()
+, m_pSFusion(NULL)
 , m_HMDInfo()
 , m_SConfig()
 , m_fboWidth(0)
@@ -70,6 +70,8 @@ OVRkill::OVRkill()
 
 OVRkill::~OVRkill()
 {
+    //if (m_pSFusion)
+    //    delete m_pSFusion;
     DestroyOVR();
 }
 
@@ -134,10 +136,14 @@ void OVRkill::PresentFbo_NoDistortion() const
         };
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, verts);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, texs);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
+        
+        int posAttrib =  glGetAttribLocation(m_progPresFbo, "vPosition");
+        int texAttrib =  glGetAttribLocation(m_progPresFbo, "vTex");
+        
+        glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, verts);
+        glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0, texs);
+        glEnableVertexAttribArray(posAttrib);
+        glEnableVertexAttribArray(texAttrib);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_renderBuffer.tex);
@@ -148,8 +154,8 @@ void OVRkill::PresentFbo_NoDistortion() const
                        GL_UNSIGNED_INT,
                        &tris[0]);
 
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(posAttrib);
+        glDisableVertexAttribArray(texAttrib);
     }
     glUseProgram(0);
 }
@@ -241,18 +247,22 @@ void OVRkill::PresentFbo_PostProcessDistortion(
         };
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, verts);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, texs);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
+        
+        int posAttrib =  glGetAttribLocation(m_progPresFbo, "vPosition");
+        int texAttrib =  glGetAttribLocation(m_progPresFbo, "vTex");
+        
+        glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, verts);
+        glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 0, texs);
+        glEnableVertexAttribArray(posAttrib);
+        glEnableVertexAttribArray(texAttrib);
 
         glDrawElements(GL_TRIANGLES,
                        6,
                        GL_UNSIGNED_INT,
                        &tris[0]);
 
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(posAttrib);
+        glDisableVertexAttribArray(texAttrib);
     }
     glUseProgram(0);
 }
@@ -280,6 +290,7 @@ void OVRkill::UpdateEyeParams()
 void OVRkill::InitOVR()
 {
     OVR::System::Init(OVR::Log::ConfigureDefaultLog(OVR::LogMask_All));
+    m_pSFusion = new OVR::SensorFusion;
     m_pManager = *OVR::DeviceManager::Create();
     m_pHMD  = *m_pManager->EnumerateDevices<OVR::HMDDevice>().CreateDevice();
     if (m_pHMD == NULL)
@@ -322,7 +333,7 @@ void OVRkill::InitOVR()
             // We need to attach sensor to SensorFusion object for it to receive 
             // body frame messages and update orientation. SFusion.GetOrientation() 
             // is used in OnIdle() to orient the view.
-            m_SFusion.AttachToSensor(m_pSensor);
+            m_pSFusion->AttachToSensor(m_pSensor);
             //SFusion.SetDelegateMessageHandler(this);
             //SFusion.SetPredictionEnabled(true);
         }
