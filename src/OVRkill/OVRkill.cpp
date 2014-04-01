@@ -75,6 +75,13 @@ OVRkill::~OVRkill()
     DestroyOVR();
 }
 
+OVR::Quatf OVRkill::GetOrientation() const
+{
+    if (m_pSFusion == NULL)
+        return OVR::Quatf();
+    return m_pSFusion->GetOrientation();
+}
+
 void OVRkill::DestroyOVR()
 {
     // Clear these before calling Destroy.

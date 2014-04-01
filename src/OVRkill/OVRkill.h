@@ -48,9 +48,9 @@ public:
     virtual ~OVRkill();
 
     bool       SensorActive() const { return m_pSensor != NULL; }
-    OVR::Quatf GetOrientation() const { return m_pSFusion->GetOrientation(); }
     bool       GetStereoMode() const { return m_SConfig.GetStereoMode() == OVR::Util::Render::Stereo_LeftRight_Multipass; }
     const OVR::HMDInfo& GetHMD() const { return m_HMDInfo; }
+    OVR::Quatf GetOrientation() const;
 
     int GetOculusWidth() const { return m_windowWidth; }
     int GetOculusHeight() const { return m_windowHeight; }
