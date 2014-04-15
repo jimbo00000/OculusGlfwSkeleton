@@ -24,14 +24,18 @@ public:
     AppSkeleton();
     virtual ~AppSkeleton();
 
+    virtual bool initGL(int argc, char **argv);
     virtual void display(bool isControl=false, OVRkill::DisplayMode mode=OVRkill::SingleEye) const {}
     virtual void mouseDown(int button, int state, int x, int y) {}
     virtual void mouseMove(int x, int y) {}
     virtual void mouseWheel(int x, int y) {}
     virtual void keyboard(int key, int action, int x, int y) {}
-    virtual void resize(int w, int h) {}
-    virtual bool initGL(int argc, char **argv);
-    
+    virtual void resize(int w, int h)
+    {
+        m_windowWidth = w;
+        m_windowHeight = h;
+    }
+
     virtual const int w() const { return m_windowWidth; }
     virtual const int h() const { return m_windowHeight; }
 

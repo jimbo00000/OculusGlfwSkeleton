@@ -445,8 +445,6 @@ void OculusAppSkeleton::keyboard(int key, int action, int x, int y)
 
 void OculusAppSkeleton::resize(int w, int h)
 {
-    m_windowWidth = w;
-    m_windowHeight = h;
     AppSkeleton::resize(w,h);
 }
 
