@@ -30,7 +30,7 @@ protected:
     void DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const;
 
 protected:
-    void _DrawBouncingCubes(const OVR::Matrix4f& mview) const;
+    void _DrawBouncingCubes(const float* pMview) const;
     void _DrawSceneWireFrame(const OVR::Matrix4f& mview) const;
     void _DrawScenePlanes(const OVR::Matrix4f& mview) const;
 

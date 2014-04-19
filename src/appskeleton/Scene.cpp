@@ -154,8 +154,9 @@ void Scene::DrawOrigin() const
 }
 
 /// Draw a circle of color cubes(why not)
-void Scene::_DrawBouncingCubes(const OVR::Matrix4f& mview) const
+void Scene::_DrawBouncingCubes(const float* pMview) const
 {
+    float sinmtx[16];
     const int numCubes = 12;
     for (int i=0; i<numCubes; ++i)
     {
@@ -167,8 +168,7 @@ void Scene::_DrawBouncingCubes(const OVR::Matrix4f& mview) const
         const float amplitude = m_amplitude;
         float oscVal = amplitude * sin(frequency * (m_phaseVal + posPhase));
 
-        float sinmtx[16];
-        memcpy(sinmtx, &mview.Transposed().M[0][0], 16*sizeof(float));
+        memcpy(sinmtx, pMview, 16*sizeof(float));
         glhTranslate(sinmtx, cubePosition.x, oscVal, cubePosition.z);
 
         const float scale = m_cubeScale;
@@ -256,7 +256,7 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
         glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
 
         //_DrawSceneWireFrame(mview);
-        _DrawBouncingCubes(mview);
+        _DrawBouncingCubes(&mview.Transposed().M[0][0]);
     }
     glUseProgram(0);
 }
