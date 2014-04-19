@@ -21,6 +21,8 @@
 #  include "vector_make_helpers.h"
 #endif
 
+#include "MatrixMath.h"
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "GL/ShaderFunctions.h"
@@ -164,12 +166,15 @@ void Scene::_DrawBouncingCubes(const OVR::Matrix4f& mview) const
         const float frequency = 3.0f;
         const float amplitude = m_amplitude;
         float oscVal = amplitude * sin(frequency * (m_phaseVal + posPhase));
-        
-        OVR::Matrix4f tx = mview * OVR::Matrix4f::Translation(cubePosition.x, oscVal, cubePosition.z);
-        const float scale = m_cubeScale;
-        tx = tx * OVR::Matrix4f::Scaling(scale, scale, scale);
-        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &tx.Transposed().M[0][0]);
 
+        float sinmtx[16];
+        memcpy(sinmtx, &mview.Transposed().M[0][0], 16*sizeof(float));
+        glhTranslate(sinmtx, cubePosition.x, oscVal, cubePosition.z);
+
+        const float scale = m_cubeScale;
+        glhScale(sinmtx, scale, scale, scale);
+
+        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, sinmtx);
         DrawColorCube();
     }
 }
