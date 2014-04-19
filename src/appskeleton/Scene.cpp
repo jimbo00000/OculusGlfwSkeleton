@@ -85,45 +85,6 @@ void Scene::DrawColorCube() const
                    &quads[0]);
 }
 
-
-/// Draw a grid in the xz plane at y=0.
-void Scene::DrawGrid() const
-{
-    const int gridSz = 40;
-    const float extent = 16.0f;
-    const float3 gray = {0.5f, 0.5f, 0.5f};
-    const int numVerts = 4 * (gridSz + 1);
-
-    float3 vVertices[numVerts];
-    float3 vColors  [numVerts];
-
-    for (int i=0; i<=gridSz; ++i)
-    {
-        const float lineValue = -extent + (float)(2*i)*extent/(float)gridSz;
-        float3 vert = { -extent, 0.0f, lineValue };
-        vVertices[4*i  ] = vert;
-        vert.x = extent;
-        vVertices[4*i+1] = vert;
-
-        float3 vertY = { lineValue, 0.0f, -extent };
-        vVertices[4*i+2] = vertY;
-        vertY.z = extent;
-        vVertices[4*i+3] = vertY;
-
-        vColors[4*i  ] = gray;
-        vColors[4*i+1] = gray;
-        vColors[4*i+2] = gray;
-        vColors[4*i+3] = gray;
-    }
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vVertices);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, vColors);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glDrawArrays(GL_LINES, 0, numVerts);
-}
-
-
 /// Utility function to draw colored line segments along unit x,y,z axes
 void Scene::DrawOrigin() const
 {
@@ -179,18 +140,6 @@ void Scene::_DrawBouncingCubes(const float* pMview) const
     }
 }
 
-/// Draw a floor and ceiling using GL_LINES.
-/// You will find the the LINES and POINTS primitive do not work in VR - they break depth
-/// cues with their different rasterization behavior from TRIANGLES.
-void Scene::_DrawSceneWireFrame(const OVR::Matrix4f& mview) const
-{
-    DrawGrid();
-
-    const float ceilHeight = 3.0f;
-    OVR::Matrix4f ceiltx = mview * OVR::Matrix4f::Translation(0.0f, ceilHeight, 0.0f);
-    glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &ceiltx.Transposed().M[0][0]);
-    DrawGrid();
-}
 
 void DrawPlane()
 {
@@ -261,7 +210,6 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
         glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, pMview);
         glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, pPersp);
 
-        //_DrawSceneWireFrame(mview);
         _DrawBouncingCubes(pMview);
     }
     glUseProgram(0);
