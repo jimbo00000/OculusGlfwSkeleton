@@ -32,7 +32,7 @@ protected:
 protected:
     void _DrawBouncingCubes(const float* pMview) const;
     void _DrawSceneWireFrame(const OVR::Matrix4f& mview) const;
-    void _DrawScenePlanes(const OVR::Matrix4f& mview) const;
+    void _DrawScenePlanes(const float* pMview) const;
 
     GLuint m_progBasic;
     GLuint m_progPlane;

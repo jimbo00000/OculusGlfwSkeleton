@@ -227,10 +227,8 @@ void DrawPlane()
     glDisableVertexAttribArray(1);
 }
 
-void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
+void Scene::_DrawScenePlanes(const float* pMview) const
 {
-    const float* pMview = &mview.Transposed().M[0][0];
-
     DrawPlane(); // matrix uniform is already set by caller
 
     float mv[16];
@@ -254,7 +252,7 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
         glUniformMatrix4fv(getUniLoc(m_progPlane, "mvmtx"), 1, false, pMview);
         glUniformMatrix4fv(getUniLoc(m_progPlane, "prmtx"), 1, false, pPersp);
 
-        _DrawScenePlanes(mview);
+        _DrawScenePlanes(pMview);
     }
     glUseProgram(0);
 
