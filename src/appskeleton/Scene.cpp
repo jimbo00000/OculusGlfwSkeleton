@@ -191,11 +191,8 @@ void Scene::_DrawScenePlanes(const float* pMview) const
 
 
 /// Draw the scene(matrices have already been set up).
-void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
+void Scene::DrawScene(const float* pMview, const float* pPersp) const
 {
-    const float* pMview = &mview.Transposed().M[0][0];
-    const float* pPersp = &persp.Transposed().M[0][0];
-
     glUseProgram(m_progPlane);
     {
         glUniformMatrix4fv(getUniLoc(m_progPlane, "mvmtx"), 1, false, pMview);
@@ -218,5 +215,8 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
 
 void Scene::RenderForOneEye(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
 {
-    DrawScene(mview, persp);
+    const float* pMview = &mview.Transposed().M[0][0];
+    const float* pPersp = &persp.Transposed().M[0][0];
+
+    DrawScene(pMview, pPersp);
 }
