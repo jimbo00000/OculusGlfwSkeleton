@@ -241,10 +241,13 @@ void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
 /// Draw the scene(matrices have already been set up).
 void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
 {
+    const float* pMview = &mview.Transposed().M[0][0];
+    const float* pPersp = &persp.Transposed().M[0][0];
+
     glUseProgram(m_progPlane);
     {
-        glUniformMatrix4fv(getUniLoc(m_progPlane, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
-        glUniformMatrix4fv(getUniLoc(m_progPlane, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(m_progPlane, "mvmtx"), 1, false, pMview);
+        glUniformMatrix4fv(getUniLoc(m_progPlane, "prmtx"), 1, false, pPersp);
 
         _DrawScenePlanes(mview);
     }
@@ -252,11 +255,11 @@ void Scene::DrawScene(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) co
 
     glUseProgram(m_progBasic);
     {
-        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &mview.Transposed().M[0][0]);
-        glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, &persp.Transposed().M[0][0]);
+        glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, pMview);
+        glUniformMatrix4fv(getUniLoc(m_progBasic, "prmtx"), 1, false, pPersp);
 
         //_DrawSceneWireFrame(mview);
-        _DrawBouncingCubes(&mview.Transposed().M[0][0]);
+        _DrawBouncingCubes(pMview);
     }
     glUseProgram(0);
 }
