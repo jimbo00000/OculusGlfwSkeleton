@@ -229,11 +229,16 @@ void DrawPlane()
 
 void Scene::_DrawScenePlanes(const OVR::Matrix4f& mview) const
 {
-    DrawPlane();
+    const float* pMview = &mview.Transposed().M[0][0];
 
+    DrawPlane(); // matrix uniform is already set by caller
+
+    float mv[16];
+    memcpy(mv, pMview, 16*sizeof(float));
     const float ceilHeight = 3.0f;
-    OVR::Matrix4f ceiltx = mview * OVR::Matrix4f::Translation(0.0f, ceilHeight, 0.0f);
-    glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, &ceiltx.Transposed().M[0][0]);
+    glhTranslate(mv, 0.0f, ceilHeight, 0.0f);
+
+    glUniformMatrix4fv(getUniLoc(m_progBasic, "mvmtx"), 1, false, mv);
     DrawPlane();
 }
 
