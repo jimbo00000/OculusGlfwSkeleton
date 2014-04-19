@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 
-#include "OVRkill/OVRkill.h"
-
 ///@brief The Scene class renders everything in the VR world that will be the same
 /// in the Oculus and Control windows. The RenderForOneEye function is the display entry point.
 class Scene
@@ -21,7 +19,7 @@ public:
     virtual ~Scene();
 
     void initGL();
-    void RenderForOneEye(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const;
+    void RenderForOneEye(const float* pMview, const float* pPersp) const;
 
 protected:
     void DrawColorCube() const;

@@ -14,8 +14,6 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 
-#include <GLFW/glfw3.h>
-
 #ifdef USE_CUDA
 #else
 #  include "vector_make_helpers.h"
@@ -213,10 +211,7 @@ void Scene::DrawScene(const float* pMview, const float* pPersp) const
 }
 
 
-void Scene::RenderForOneEye(const OVR::Matrix4f& mview, const OVR::Matrix4f& persp) const
+void Scene::RenderForOneEye(const float* pMview, const float* pPersp) const
 {
-    const float* pMview = &mview.Transposed().M[0][0];
-    const float* pPersp = &persp.Transposed().M[0][0];
-
     DrawScene(pMview, pPersp);
 }

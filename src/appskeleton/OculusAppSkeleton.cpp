@@ -533,6 +533,11 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
         OVR::Matrix4f viewLeft = OVR::Matrix4f::Translation(halfIPD, 0, 0) * m_oculusView;
         OVR::Matrix4f viewRight= OVR::Matrix4f::Translation(-halfIPD, 0, 0) * m_oculusView;
 
+        const float* pViewLeft  = &viewLeft.Transposed().M[0][0];
+        const float* pViewRight = &viewRight.Transposed().M[0][0];
+        const float* pProjLeft  = &projLeft.Transposed().M[0][0];
+        const float* pProjRight = &projRight.Transposed().M[0][0];
+
         ///@note Scissoring out the fragments near the periphery of the FOV should (hopefully)
         /// result in higher performance by having to draw fewer pixels.
         /// This is contingent on the driver's implementation performing the scissor test
@@ -543,11 +548,11 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
 
             glViewport(0          , 0, (GLsizei)halfWidth     , (GLsizei)fboHeight     );
             glScissor (g          , g, (GLsizei)halfWidth -2*g, (GLsizei)fboHeight -2*g);
-            m_scene.RenderForOneEye(viewLeft, projLeft);
+            m_scene.RenderForOneEye(pViewLeft, pProjLeft);
 
             glViewport(halfWidth  , 0, (GLsizei)halfWidth     , (GLsizei)fboHeight     );
             glScissor (halfWidth+g, g, (GLsizei)halfWidth -2*g, (GLsizei)fboHeight -2*g);
-            m_scene.RenderForOneEye(viewRight, projRight);
+            m_scene.RenderForOneEye(pViewRight, pProjRight);
         }
         glDisable(GL_SCISSOR_TEST);
     }
@@ -562,8 +567,11 @@ void OculusAppSkeleton::DrawScene(bool stereo, OVRkill::DisplayMode mode) const
             0.004f,
             500.0f);
 
+        const float* pMview = &mview.Transposed().M[0][0];
+        const float* pPersp = &persp.Transposed().M[0][0];
+
         glViewport(0,0,(GLsizei)fboWidth, (GLsizei)fboHeight);
-        m_scene.RenderForOneEye(mview, persp);
+        m_scene.RenderForOneEye(pMview, pPersp);
 
         DrawFrustumAvatar(mview, persp);
     }
