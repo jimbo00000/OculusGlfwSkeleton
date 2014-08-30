@@ -1,5 +1,10 @@
 # OculusGlfwSkeleton
 
+
+### As of version 0.4.0 of the OVR SDK, this project is obsolete and superseded by the newer [RiftSkeleton](https://github.com/jimbo00000/RiftSkeleton).
+
+
+
 ## Description
 
 A cross-platform multi-window app skeleton to use as a starting point for native VR app development with OpenGL. A convenient interface for tweaking common VR display parameters.
